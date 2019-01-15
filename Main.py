@@ -1,9 +1,17 @@
 import pygame
-from Player import Player
+from block import Grid
+from player import Player
 pygame.init()
-gameDisplay = pygame.display.set_mode((1000, 1000))
+gameDisplay = pygame.display.set_mode((700, 700))
+grass = pygame.image.load('HGSS_Grass2.png').convert()
+fieldlist = [[],[],[],[],[]]
+for l in fieldlist:
+    for x in range(len(l)):
+        l[x] = grass
+field = Grid((5,5), fieldlist)
 Player1 = Player()
 running = True
+gameDisplay.blit(Player1.sprite, (Player1.x,Player1.y))
 while running:
     for e in pygame.event.get():
         if e.type == pygame.QUIT:
