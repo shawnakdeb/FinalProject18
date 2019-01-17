@@ -60,8 +60,7 @@ class Player:
         self.y = 3.5
         field.map_blit()
         gameDisplay.blit(self.sprite, (grass.get_size()[0]*self.x,grass.get_size()[1]*self.y))
-        field.top_blit(self.x, self.y)
-    """def turn(self, direction):
+    def turn(self, direction):
         sprite_list = []
         changex = 0
         changey = 0
@@ -81,7 +80,6 @@ class Player:
         gameDisplay.blit(sprite_list[1], (grass.get_size()[0]*self.x,grass.get_size()[1]*self.y))
         field.top_blit(self.x, self.y)
         pygame.display.flip()
-        pygame.time.wait(3500)"""
     def walk (self, direction):
         sprite_list = []
         changex = 0
