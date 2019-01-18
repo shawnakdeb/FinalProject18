@@ -7,7 +7,7 @@ gameDisplay = pygame.display.set_mode(((width+1)*grass.get_size()[0], (length+1)
 Player1 = Player()
 #Player2 = Player()
 running = True
-last_presssed = ""
+last_presssed = "down"
 while running:
     for e in pygame.event.get():
         if e.type == pygame.QUIT:
