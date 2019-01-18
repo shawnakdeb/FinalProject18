@@ -4,7 +4,7 @@ def grassblit():
     for k,v in (grass_pos):
         gameDisplay.blit(grass_pos[(k,v)], (k,v))
 pygame.init()
-gameDisplay = pygame.display.set_mode((1000, 1000))    # create a surface called 'screen' and give it a size of 400x400
+gameDisplay = pygame.display.set_mode((1000, 1000))    # create a surface called 'screen' and give it a size of 1000x1000
 fs = pygame.image.load('still_front.png').convert()#17x23
 f1 = pygame.image.load('Forward_1.png').convert()
 f2 = pygame.image.load('Forward_2.png').convert()
@@ -17,8 +17,8 @@ l2 = pygame.image.load('Left_2.png').convert()
 rs = pygame.image.load('still_right.png').convert()
 r1 = pygame.image.load('Right_1.png').convert()
 r2 = pygame.image.load('Right_2.png').convert()
-grass = pygame.image.load('RSE_Grass2.png').convert()
-grass2 = pygame.image.load('HGSS_Grass2.png').convert()
+grass = pygame.image.load('DP_Grass2.png').convert()
+grass2 = pygame.image.load('MoWeird.png').convert()
 grass3 = pygame.image.load('Pt_Grass2.png').convert()
 running = True      # used to control while loop
 recx = 0
