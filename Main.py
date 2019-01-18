@@ -8,6 +8,7 @@ Player1 = Player()
 #Player2 = Player()
 running = True
 last_presssed = "down"
+t0 = 1
 while running:
     for e in pygame.event.get():
         if e.type == pygame.QUIT:
