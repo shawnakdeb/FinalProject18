@@ -1,7 +1,8 @@
-import pygame
+import pygame, os
 from block import Grid
 from player import *
 pygame.init()
+print(os.getcwd())
 gameDisplay = pygame.display.set_mode(((width+1)*grass.get_size()[0], (length+1)*grass.get_size()[1]))
 Player1 = Player()
 #Player2 = Player()
