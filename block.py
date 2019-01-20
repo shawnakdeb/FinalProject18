@@ -7,12 +7,19 @@ gameDisplay = pygame.display.set_mode((700, 700))
 
 class Block:
     def __init__(self,x,y,image,walkable):
-        self.walkable = walkable
+        self.walkable_var = walkable
         self.coordinate = (x,y)
         self.realcoordinates = (image.get_size()[0]*x,image.get_size()[1]*y)
         self.image = image
     def blit(self):
         gameDisplay.blit(self.image, self.realcoordinates)
+    def walkable(self):
+        from Main import Player_list
+        walkable2 = True
+        for p in (Player_list):
+            if ((int(math.floor(p.x)),int(math.ceil(p.y))) == self.coordinate):
+                walkable2 = False
+        return (self.walkable_var and walkable2)
 
 class Wild_Block:
     def __init__(self, x,y, image, wild_pokemon):
@@ -57,7 +64,7 @@ class Grid:
                     Tree2Part.set_colorkey(BLACK)
                     gameDisplay.blit(Tree2Part, self.blocks[i][j].realcoordinates)
     def can_walk(self, x, y):
-        return self.blocks[int(x)][int(y)].walkable
+        return self.blocks[int(x)][int(y)].walkable()
 
 running = False
 while running:
