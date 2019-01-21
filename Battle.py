@@ -1,13 +1,34 @@
-from Pokemon import Pokemon
-import pygame
-pygame.init()
-screen = pygame.display.set_mode((400, 400))
-running = True
+import Pokemon
+from Move import move
+import pygame, math, random
 
-@staticmethod
+
 def turn(atkP, defP):
-   pass
-@staticmethod
+   print(defP.species,"HP =",defP.hp)
+   move = choose_move(atkP)
+   damage = calcDamage(atkP, defP, move)
+   print("Damage to",defP.species,":",damage)
+   defP.hp -= damage
+   print(defP.species,"HP now =",defP.hp)
+
+
+def choose_move(atkP):
+    move_name = input("What move do you use?")
+    return findMove(move_name)
+
+def findMove(move_name):
+    key = move_name
+
+    moves = {
+        'Hydro Pump': move('Hydro Pump', 'Water', 110, 80, 5),
+        'Thunderbolt': move('Thunderbolt', 'Electric', 90, 100, 15)
+    }
+    if key in moves:
+        return moves[key]
+    else:
+        return 'N/A'
+
+
 def battle(userP, compP):
    while userP.hp > 0 and compP.hp > 0:
        if userP.spd >= compP.spd:
@@ -21,9 +42,140 @@ def battle(userP, compP):
                break
            turn(userP, compP)
   
-while running:
 
-   for e in pygame.event.get():    # get each event in the event queue...
-    if e.type == pygame.QUIT:   # ...and if that event is QUIT...
-       running = False         # ......set running to False so the main loop ends
+def calcMultiplier(move, defPok):
+    key = (move.type, defPok.type)
+    multiplier = 1
+    check = {
+        ('Fire', 'Water') : 0.5,
+        ('Fire', 'Rock') : 0.5,
+        ('Fire', 'Grass') : 2,
+        ('Fire', 'Bug') : 2,
+        ('Fire', 'Ice') : 2,
+        ('Fire', 'Dragon') : 2,
+        ('Fire', 'Fire') : 2,
+
+        ('Bug', 'Fire') : 0.5,
+        ('Bug', 'Flying') : 0.5,
+        ('Bug', 'Grass') : 2,
+        ('Bug', 'Poison') : 2,
+        ('Bug', 'Psychic') : 2,
+        ('Bug', 'Rock') : 0.5,
+        ('Bug', 'Fighting') : 0.5,
+
+        ('Electric', 'Electric') : 0.5,
+        ('Electric', 'Flying') : 2,
+        ('Electric', 'Grass') : 0.5,
+        ('Electric', 'Ground') : 0,
+        ('Electric', 'Water') : 2,
+        ('Electric', 'Dragon') : 0.5,
+
+        ('Fighting', 'Flying') : 0.5,
+        ('Fighting', 'Ghost') : 0,
+        ('Fighting', 'Ice') : 2,
+        ('Fighting', 'Normal') : 2,
+        ('Fighting', 'Psychic') : 0.5,
+        ('Fighting', 'Rock') : 2,
+        ('Fighting', 'Poison') : 0.5,
+        ('Fighting', 'Bug') : 0.5,
+
+        ('Flying', 'Bug') : 2,
+        ('Flying', 'Electric') : 0.5,
+        ('Flying', 'Fighting') : 2,
+        ('Flying', 'Grass') : 2,
+        ('Flying', 'Rock') : 0.5,
+        
+        ('Normal', 'Ghost') : 0,
+        ('Normal', 'Fighting') : 0.5,
+
+        ('Water', 'Fire') : 2,
+        ('Water', 'Water') : 0.5,
+        ('Water', 'Grass') : 0.5,
+        ('Water', 'Ground') : 2,
+        ('Water', 'Rock') : 2,
+        ('Water', 'Dragon') : 0.5,
+
+        ('Grass', 'Fire') : 0.5,
+        ('Grass', 'Water') : 2,
+        ('Grass', 'Grass') : 0.5,
+        ('Grass', 'Poison') : 0.5,
+        ('Grass', 'Ground') : 2,
+        ('Grass', 'Flying') : 0.5,
+        ('Grass', 'Bug') : 0.5,
+        ('Grass', 'Rock') : 2,
+        ('Grass', 'Dragon') : 0.5,
+
+        ('Ice', 'Water') : 0.5,
+        ('Ice', 'Grass') : 2,
+        ('Ice', 'Ice') : 0.5,
+        ('Ice', 'Ground') : 2,
+        ('Ice', 'Flying') : 2,
+        ('Ice', 'Dragon') : 2,
+
+        ('Poison', 'Grass') : 2,
+        ('Poison', 'Poison') : 0.5,
+        ('Poison', 'Ground') : 0.5,
+        ('Poison', 'Bug') : 2,
+        ('Poison', 'Rock') : 0.5,
+        ('Poison', 'Ghost') : 0.5,
+
+        ('Ground', 'Poison') : 2,
+        ('Ground', 'Fire') : 2,
+        ('Ground', 'Electric') : 2,
+        ('Ground', 'Grass') : 0.5,
+        ('Ground', 'Flying') : 0,
+        ('Ground', 'Bug') : 0.5,
+        ('Ground', 'Rock') : 2,
+
+        ('Psychic', 'Fighting') : 2,
+        ('Psychic', 'Poison') : 2,
+        ('Psychic', 'Psychic') : 0.5,
+
+        ('Rock', 'Fire') : 2,
+        ('Rock', 'Ice') : 2,
+        ('Rock', 'Fighting') : 2,
+        ('Rock', 'Ground') : 2,
+        ('Rock', 'Flying') : 2,
+        ('Rock', 'Bug') : 2,
+
+        ('Ghost', 'Psychic') : 0,
+        ('Ghost', 'Normal') : 0,
+        ('Ghost', 'Ghost') : 2,
+
+        ('Dragon', 'Dragon') : 2,
+    }
+    if key in check:
+        multiplier = check[key]
+
+    return multiplier
+
+def calcDamage(atkPok, defPok, move):
+    typeMult = calcMultiplier(move, defPok)
+    
+    randMult = random.randint(217, 255) / 255.0
+    
+    STABMult = 1
+    if(move.type == atkPok.type):
+        STABMult = 1.5
+    
+    critMult = 1
+    crit_prob = atkPok.base_spd / 512.0
+    if random.random() < crit_prob:
+        critMult = 2 
+
+    mod = typeMult * randMult * STABMult * critMult
+
+    damage = mod * ( (2*atkPok.lvl/5 + 2) * move.power * atkPok.atk / defPok.defe / 50 + 2)
+    return damage     
+
+
+t = Pokemon.Pokemon("Pikachu", 35, 55, 40, 90, 112, "", 500000, "Electric", ["Thunderbolt", "Quick Attack", "Iron Tail", "Agility"] )
+v = Pokemon.Pokemon("Arbok", 60, 95, 69, 80, 157, "", 500000, "Electric", ["Hydro Pump", "Bite", "Earthquake", "Rock Slide"] )
+Pokemon.checkLvlUp(t)
+Pokemon.calcStats(t)
+Pokemon.checkLvlUp(v)
+Pokemon.calcStats(v)
+print(t.lvl, t.atk, t.defe, t.spd, t.hp)
+print(v.lvl, v.atk, v.defe, v.spd, v.hp)
+battle(t, v)
 

@@ -5,6 +5,8 @@ def grassblit():
         gameDisplay.blit(grass_pos[(k,v)], (k,v))
 pygame.init()
 gameDisplay = pygame.display.set_mode((1000, 1000))    # create a surface called 'screen' and give it a size of 1000x1000
+pygame.mixer.music.load('Battle Music.mp3')
+pygame.mixer.music.play(-1)
 fs = pygame.image.load('still_front.png').convert()#17x23
 f1 = pygame.image.load('Forward_1.png').convert()
 f2 = pygame.image.load('Forward_2.png').convert()
@@ -17,9 +19,7 @@ l2 = pygame.image.load('Left_2.png').convert()
 rs = pygame.image.load('still_right.png').convert()
 r1 = pygame.image.load('Right_1.png').convert()
 r2 = pygame.image.load('Right_2.png').convert()
-grass = pygame.image.load('DP_Grass2.png').convert()
-grass2 = pygame.image.load('MoWeird.png').convert()
-grass3 = pygame.image.load('Pt_Grass2.png').convert()
+grass = pygame.image.load('HGSS_Grass2.png').convert()
 running = True      # used to control while loop
 recx = 0
 recy = 0
@@ -45,13 +45,13 @@ for x in range (10):
 recx = 10*grass.get_size()[0]
 for x in range (10):
     for y in range (10):
-        grass_pos[(recx+x*grass2.get_size()[0],recy+y*grass2.get_size()[1])] = grass2
-        gameDisplay.blit(grass2, (recx+x*grass2.get_size()[0],recy+y*grass2.get_size()[1]))
-recx += 10*grass2.get_size()[0]
+        grass_pos[(recx+x*grass.get_size()[0],recy+y*grass.get_size()[1])] = grass
+        gameDisplay.blit(grass, (recx+x*grass.get_size()[0],recy+y*grass.get_size()[1]))
+recx += 10*grass.get_size()[0]
 for x in range (10):
     for y in range (10):
-        grass_pos[(recx+x*grass3.get_size()[0],recy+y*grass3.get_size()[1])] = grass3
-        gameDisplay.blit(grass3, (recx+x*grass3.get_size()[0],recy+y*grass3.get_size()[1]))
+        grass_pos[(recx+x*grass.get_size()[0],recy+y*grass.get_size()[1])] = grass
+        gameDisplay.blit(grass, (recx+x*grass.get_size()[0],recy+y*grass.get_size()[1]))
 sx = 100
 sy = 100
 gameDisplay.blit(bs, (sx,sy))
