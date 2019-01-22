@@ -15,6 +15,16 @@ def turn(atkP, defP, is_user_turn):
     print("Damage to",defP.species,":",damage)
     defP.hp -= damage
     print(defP.species,"HP now =",defP.hp, "\n\n")
+def turn(atkP, defP):
+   print(defP.species,"HP =",defP.hp)
+   move = choose_move(atkP)
+   while (move.m_type == "null"):
+       print ("That is not a move you know")
+       move = choose_move(atkP)
+   damage = calcDamage(atkP, defP, move)
+   print("Damage to",defP.species,":",damage)
+   defP.hp -= damage
+   print(defP.species,"HP now =",defP.hp)
 
 def comp_move(atkP):
     move_name = random.choice(atkP.moves)
@@ -43,7 +53,7 @@ def findMove(move_name):
     if key in moves:
         return moves[key]
     else:
-        return 'N/A'
+        return move('null', 'null', 0, 100, 100)
 
 
 def battle(userP, compP):
@@ -225,3 +235,5 @@ for x in range(10):
     print(t.lvl, t.atk, t.defe, t.spd, t.hp)
     print(v.lvl, v.atk, v.defe, v.spd, v.hp)
 print(pWins)
+#battle(t, v)
+

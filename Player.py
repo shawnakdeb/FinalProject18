@@ -3,6 +3,7 @@ import pygame
 pygame.init()
 gameDisplay = pygame.display.set_mode((700, 700))
 from block import Grid
+from Battle import *
 WHITE = (255,255,255)
 grass = pygame.image.load('HGSS_Grass2.png').convert()
 plain = pygame.image.load('plain.png').convert()
@@ -13,25 +14,25 @@ for x in range(width+1):
     fieldlist.append({})
     for y in range(length+1):
         if ((not ((x == 0 or x == width - 1) and y == length - 2)) and (x%2 == 0 and (y == 0 or y == length - 2))):
-            fieldlist[x][y] = ((pygame.image.load('Tree1.png').convert()), True)
+            fieldlist[x][y] = ((pygame.image.load('Tree1.png').convert()), True, False)
         elif ((not ((x == 1 or x == width) and y == length - 2)) and (x%2 == 1 and (y == 0 or y == length - 2))):
-            fieldlist[x][y] = ((pygame.image.load('Tree2.png').convert()), True)
+            fieldlist[x][y] = ((pygame.image.load('Tree2.png').convert()), True, False)
         elif ((not ((x == 0 or x == width - 1) and y == 2)) and (x%2 == 0 and (y == 2 or y == length))):
-            fieldlist[x][y] = ((pygame.image.load('Tree5.png').convert()), False)
+            fieldlist[x][y] = ((pygame.image.load('Tree5.png').convert()), False, False)
         elif ((not ((x == 1 or x == width) and y == 2)) and (x%2 == 1 and (y == 2 or y == length))):
-            fieldlist[x][y] = ((pygame.image.load('Tree6.png').convert()), False)
+            fieldlist[x][y] = ((pygame.image.load('Tree6.png').convert()), False, False)
         elif (((x == 0 or x == width - 1) and y%2 == 1) or (x%2 == 0 and (y == 1 or y == length - 1))):
-            fieldlist[x][y] = ((pygame.image.load('Tree3.png').convert()), False)
+            fieldlist[x][y] = ((pygame.image.load('Tree3.png').convert()), False, False)
         elif (((x == 1 or x == width) and y%2 == 1) or (x%2 == 1 and (y == 1 or y == length - 1))):
-            fieldlist[x][y] = ((pygame.image.load('Tree4.png').convert()), False)
+            fieldlist[x][y] = ((pygame.image.load('Tree4.png').convert()), False, False)
         elif ((x == 0 or x == width - 1) and y%2 == 0):
-            fieldlist[x][y] = ((pygame.image.load('Tree7.png').convert()), False)
+            fieldlist[x][y] = ((pygame.image.load('Tree7.png').convert()), False, False)
         elif ((x == 1 or x == width) and y%2 == 0):
-            fieldlist[x][y] = ((pygame.image.load('Tree8.png').convert()), False)
+            fieldlist[x][y] = ((pygame.image.load('Tree8.png').convert()), False, False)
         elif (x == 2 or x == width - 2 or y == 3):
-            fieldlist[x][y] = (plain, True)
+            fieldlist[x][y] = (plain, True, False)
         else:    
-            fieldlist[x][y] = (grass, True)
+            fieldlist[x][y] = (grass, True, True)
 field = Grid(fieldlist)
 class Player:
     fs = pygame.image.load('still_front.png').convert()
@@ -112,6 +113,8 @@ class Player:
                 field.top_blit(self.x, self.y)
                 pygame.display.flip()
                 pygame.time.wait(90)
+        if (field.blocks[(int) (self.x - .1736)][(int) (self.y - 0.5)].wild and random.random() < 0.051):
+            battle(t,v)
     def run (self, direction):
         sprite_list = []
         changex = 0
@@ -144,6 +147,8 @@ class Player:
                 field.top_blit(self.x, self.y)
                 pygame.display.flip()
                 pygame.time.wait(75)
+        if (field.blocks[(int) (self.x - .1736)][(int) (self.y - 0.5)].wild and random.random() < 0.51):
+            battle(t,v)
 
 running = False
 while running:
