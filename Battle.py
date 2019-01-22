@@ -3,16 +3,25 @@ from Move import move
 import pygame, math, random
 
 
-def turn(atkP, defP):
-   print(defP.species,"HP =",defP.hp)
-   move = choose_move(atkP)
-   damage = calcDamage(atkP, defP, move)
-   print("Damage to",defP.species,":",damage)
-   defP.hp -= damage
-   print(defP.species,"HP now =",defP.hp)
+def turn(atkP, defP, is_user_turn):
+    is_user_turn = False
+    print(atkP.species,"is attacking",defP.species,",who has HP =",defP.hp)
+    if is_user_turn:
+        move = user_move(atkP)
+    else:
+        move = comp_move(atkP)
 
+    damage = calcDamage(atkP, defP, move)
+    print("Damage to",defP.species,":",damage)
+    defP.hp -= damage
+    print(defP.species,"HP now =",defP.hp, "\n\n")
 
-def choose_move(atkP):
+def comp_move(atkP):
+    move_name = random.choice(atkP.moves)
+    print(move_name)
+    return findMove(move_name)
+
+def user_move(atkP):
     move_name = input("What move do you use?")
     return findMove(move_name)
 
@@ -21,7 +30,15 @@ def findMove(move_name):
 
     moves = {
         'Hydro Pump': move('Hydro Pump', 'Water', 110, 80, 5),
-        'Thunderbolt': move('Thunderbolt', 'Electric', 90, 100, 15)
+        'Thunderbolt': move('Thunderbolt', 'Electric', 90, 100, 15),
+        'Bug Buzz': move('Bug Buzz', 'Bug', 90, 100, 15),
+        'Rock Climb': move('Rock Climb', 'Normal', 90, 85, 20),
+        'Sludge Bomb': move('Thunderbolt', 'Electric', 90, 100, 10),
+        'Brick Break': move('Brick Break', 'Fighting', 75, 100, 15),
+        'Earthquake': move('Earthquake', 'Ground', 100, 100, 10),
+        'Rock Slide': move('Rock Slide', 'Rock', 75, 90, 10),
+        'Surf': move('Surf', 'Water', 90, 100, 15),
+
     }
     if key in moves:
         return moves[key]
@@ -31,16 +48,21 @@ def findMove(move_name):
 
 def battle(userP, compP):
    while userP.hp > 0 and compP.hp > 0:
-       if userP.spd >= compP.spd:
-           turn(userP, compP)
+        if userP.spd >= compP.spd:
+           turn(userP, compP, True)
            if compP.hp <= 0:
-               break
-           turn(compP, userP)
-       else:
-           turn(compP, userP)
-           if compP.hp <= 0:
-               break
-           turn(userP, compP)
+               return userP
+           turn(compP, userP, False)
+        else:
+           turn(compP, userP, False)
+           if userP.hp <= 0:
+               return compP
+           turn(userP, compP, True)
+        
+        if userP.hp <= 0:
+            return compP
+        if compP.hp <= 0:
+            return userP
   
 
 def calcMultiplier(move, defPok):
@@ -151,31 +173,55 @@ def calcMultiplier(move, defPok):
 
 def calcDamage(atkPok, defPok, move):
     typeMult = calcMultiplier(move, defPok)
+
+    #print("Type Mod:",typeMult)
     
     randMult = random.randint(217, 255) / 255.0
     
+   # print("Rand Mod:",randMult)
+
     STABMult = 1
     if(move.m_type == atkPok.p_type):
         STABMult = 1.5
-    
+    #print("STAB Mod:",STABMult)
+
     critMult = 1
     crit_prob = atkPok.base_spd / 512.0
     if random.random() < crit_prob:
         critMult = 2 
 
-    mod = typeMult * randMult * STABMult * critMult
+   # print("Crit Mod:",critMult)
 
+    accMult = 1
+    if random.randint(1,100) > move.accuracy:
+        accMult = 0
+  #  print("Acc Mod:",accMult)
+
+    mod = typeMult * randMult * STABMult * critMult * accMult
+   # print("Dam Mod:",mod)
     damage = math.floor(mod * ( (2*atkPok.lvl/5 + 2) * move.power * atkPok.atk / defPok.defe / 50 + 2))
     return damage     
 
 
-t = Pokemon.Pokemon("Pikachu", 35, 55, 40, 90, 112, "", 500000, "Electric", ["Thunderbolt", "Quick Attack", "Iron Tail", "Agility"] )
-v = Pokemon.Pokemon("Arbok", 60, 95, 69, 80, 157, "", 500000, "Electric", ["Hydro Pump", "Bite", "Earthquake", "Rock Slide"] )
-Pokemon.checkLvlUp(t)
-Pokemon.calcStats(t)
-Pokemon.checkLvlUp(v)
-Pokemon.calcStats(v)
+t = Pokemon.Pokemon("Pikachu", 35, 55, 40, 90, 112, "", 100, "Electric", ["Thunderbolt", "Rock Climb", "Surf", "Bug Buzz"] )
+v = Pokemon.Pokemon("Arbok", 60, 95, 69, 80, 157, "", 60, "Poison", ["Sludge Bomb", "Brick Break", "Earthquake", "Rock Slide"] )
+Pokemon.initialize(t)
+Pokemon.initialize(v)
 print(t.lvl, t.atk, t.defe, t.spd, t.hp)
 print(v.lvl, v.atk, v.defe, v.spd, v.hp)
-battle(t, v)
-
+aWins = 0
+pWins = 0
+for x in range(10):
+    winner = battle(t, v)
+    print(winner.species,"wins")
+    if winner.species == "Pikachu":
+        pWins+=1
+        Pokemon.update_stats(t,v)
+    else:
+        aWins+=1
+        Pokemon.update_stats(v,t)
+    Pokemon.restore_hp(t)
+    Pokemon.restore_hp(v)
+    print(t.lvl, t.atk, t.defe, t.spd, t.hp)
+    print(v.lvl, v.atk, v.defe, v.spd, v.hp)
+print(pWins)

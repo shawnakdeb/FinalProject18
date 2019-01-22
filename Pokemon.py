@@ -17,20 +17,41 @@ class Pokemon:
        self.defe = 0
        self.spd = 0
        self.hp = 0
+       self.max_hp = 0
        self.sprite = sprite
        self.p_type = p_type
        self.isFainted = False
 
-def checkLvlUp(a):
-    while a.exp > 4 / 5 * a.lvl * a.lvl * a.lvl and a.lvl < 100:
-        a.lvl+=1 
+def calcLevel(pok):
+    while pok.exp > 4 / 5 * pok.lvl * pok.lvl * pok.lvl and pok.lvl < 100:
+         pok.lvl+=1        
 
 def expGain(atkPok, oppPok):
-    atkPok.exp += 2.1 * oppPok.base_exp * oppPok.lvl / 7
+     atkPok.exp += 2.1 * oppPok.base_exp * oppPok.lvl / 7
+     calcLevel(atkPok)
 
 def calcStats(pok):
     pok.atk = math.floor( ((pok.base_atk+25)*2+25)*pok.lvl/100.0 ) + 5
     pok.defe = math.floor( ((pok.base_defe+25)*2+25)*pok.lvl/100.0 ) + 5
     pok.spd = math.floor( ((pok.base_spd+25)*2+25)*pok.lvl/100.0 ) + 5
-    pok.hp = math.floor( ((pok.base_hp+25)*2+25)*pok.lvl/100.0 ) + pok.lvl + 10
-    
+    pok.max_hp = math.floor( ((pok.base_hp+25)*2+25)*pok.lvl/100.0 ) + pok.lvl + 10
+
+def initialize(pok):
+    calcLevel(pok)    
+    pok.atk = math.floor( ((pok.base_atk+25)*2+25)*pok.lvl/100.0 ) + 5
+    pok.defe = math.floor( ((pok.base_defe+25)*2+25)*pok.lvl/100.0 ) + 5
+    pok.spd = math.floor( ((pok.base_spd+25)*2+25)*pok.lvl/100.0 ) + 5
+    pok.max_hp = math.floor( ((pok.base_hp+25)*2+25)*pok.lvl/100.0 ) + pok.lvl + 10
+    pok.hp = pok.max_hp
+
+def restore_hp(pok):
+    pok.hp = pok.max_hp
+
+def update_stats(pok, deafPok):
+    expGain(pok,deafPok)
+    hpLost = pok.max_hp - pok.hp
+    calcStats(pok)
+    pok.hp = pok.max_hp - hpLost
+
+
+
