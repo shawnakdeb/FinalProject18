@@ -6,6 +6,9 @@ import pygame, math, random
 def turn(atkP, defP):
    print(defP.species,"HP =",defP.hp)
    move = choose_move(atkP)
+   while (move.m_type == "null"):
+       print ("That is not a move you know")
+       move = choose_move(atkP)
    damage = calcDamage(atkP, defP, move)
    print("Damage to",defP.species,":",damage)
    defP.hp -= damage
@@ -26,7 +29,7 @@ def findMove(move_name):
     if key in moves:
         return moves[key]
     else:
-        return 'N/A'
+        return move('null', 'null', 0, 100, 100)
 
 
 def battle(userP, compP):
@@ -177,5 +180,5 @@ Pokemon.checkLvlUp(v)
 Pokemon.calcStats(v)
 print(t.lvl, t.atk, t.defe, t.spd, t.hp)
 print(v.lvl, v.atk, v.defe, v.spd, v.hp)
-battle(t, v)
+#battle(t, v)
 

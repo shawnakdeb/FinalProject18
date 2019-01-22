@@ -1,18 +1,19 @@
 import pygame
 import math
 import random
-
 pygame.init()
 gameDisplay = pygame.display.set_mode((700, 700))
 
 class Block:
-    def __init__(self,x,y,image,walkable):
+    def __init__(self,x,y,image,walkable, wild):
         self.walkable_var = walkable
         self.coordinate = (x,y)
         self.realcoordinates = (image.get_size()[0]*x,image.get_size()[1]*y)
         self.image = image
+        self.wild = wild
     def blit(self):
         gameDisplay.blit(self.image, self.realcoordinates)
+
     def walkable(self):
         from Main import Player_list
         walkable2 = True
@@ -21,21 +22,13 @@ class Block:
                 walkable2 = False
         return (self.walkable_var and walkable2)
 
-class Wild_Block:
-    def __init__(self, x,y, image, wild_pokemon):
-        Block.__init__(self, x, y, image)
-    def wild_pokemon(self):
-        if (random.random() < 0.051):
-            #battle ensues
-            pass
-
 class Grid:
     def __init__(self, block_list):
         self.blocks = [[]]
         for x in range (len(block_list)):
             self.blocks.append([])
             for y in range (len(block_list[x])):
-                self.blocks[x].append(Block(x,y,block_list[x][y][0],block_list[x][y][1]))
+                self.blocks[x].append(Block(x,y,block_list[x][y][0],block_list[x][y][1], block_list[x][y][2]))
     def map_blit(self):
         for l in self.blocks:
             for b in range(len(l)):
