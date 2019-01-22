@@ -44,7 +44,7 @@ def battle(userP, compP):
   
 
 def calcMultiplier(move, defPok):
-    key = (move.type, defPok.type)
+    key = (move.m_type, defPok.p_type)
     multiplier = 1
     check = {
         ('Fire', 'Water') : 0.5,
@@ -155,7 +155,7 @@ def calcDamage(atkPok, defPok, move):
     randMult = random.randint(217, 255) / 255.0
     
     STABMult = 1
-    if(move.type == atkPok.type):
+    if(move.m_type == atkPok.p_type):
         STABMult = 1.5
     
     critMult = 1
@@ -165,7 +165,7 @@ def calcDamage(atkPok, defPok, move):
 
     mod = typeMult * randMult * STABMult * critMult
 
-    damage = mod * ( (2*atkPok.lvl/5 + 2) * move.power * atkPok.atk / defPok.defe / 50 + 2)
+    damage = math.floor(mod * ( (2*atkPok.lvl/5 + 2) * move.power * atkPok.atk / defPok.defe / 50 + 2))
     return damage     
 
 

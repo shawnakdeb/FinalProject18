@@ -2,7 +2,7 @@ import math, random
 
 class Pokemon:
 
-   def __init__(self, species, base_hp, base_atk, base_defe, base_spd, base_exp, sprite, exp, types, moves):
+   def __init__(self, species, base_hp, base_atk, base_defe, base_spd, base_exp, sprite, exp, p_type, moves):
        self.species = species
        self.base_hp = base_hp
        self.base_atk = base_atk
@@ -18,7 +18,7 @@ class Pokemon:
        self.spd = 0
        self.hp = 0
        self.sprite = sprite
-       self.types = types
+       self.p_type = p_type
        self.isFainted = False
 
 def checkLvlUp(a):
