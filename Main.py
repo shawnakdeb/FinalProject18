@@ -9,10 +9,10 @@ print(os.getcwd())
 gameDisplay = pygame.display.set_mode(((width+1)*grass.get_size()[0], (length+1)*grass.get_size()[1]))
 pygame.mixer.music.load('Route Music.mp3')
 pygame.mixer.music.play(-1)
-Player1= Player(3,3)
-Player2= Player(3,4)
-Player3= Player(4,3)
-Player_list=[Player1, Player2, Player3]
+Player1 = Player(3,2)
+#Player2= Player(3,4)
+#Player3= Player(4,3)
+Player_list=[Player1]#, Player2, Player3]
 p_list = Player_list.copy()
 p_list.remove(Player1)
 """for x in range (10):
