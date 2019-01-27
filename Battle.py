@@ -15,7 +15,7 @@ def turn(atkP, defP, is_user_turn):
     print("Damage to",defP.species,":",damage)
     defP.hp -= damage
     print(defP.species,"HP now =",defP.hp, "\n\n")
-def turn(atkP, defP):
+"""def turn(atkP, defP):
    print(defP.species,"HP =",defP.hp)
    move = choose_move(atkP)
    while (move.m_type == "null"):
@@ -24,7 +24,7 @@ def turn(atkP, defP):
    damage = calcDamage(atkP, defP, move)
    print("Damage to",defP.species,":",damage)
    defP.hp -= damage
-   print(defP.species,"HP now =",defP.hp)
+   print(defP.species,"HP now =",defP.hp)"""
 
 def comp_move(atkP):
     move_name = random.choice(atkP.moves)
@@ -213,7 +213,7 @@ def calcDamage(atkPok, defPok, move):
     return damage     
 
 
-t = Pokemon.Pokemon("Pikachu", 35, 55, 40, 90, 112, "", 100, "Electric", ["Thunderbolt", "Rock Climb", "Surf", "Bug Buzz"] )
+"""t = Pokemon.Pokemon("Pikachu", 35, 55, 40, 90, 112, "", 100, "Electric", ["Thunderbolt", "Rock Climb", "Surf", "Bug Buzz"] )
 v = Pokemon.Pokemon("Arbok", 60, 95, 69, 80, 157, "", 60, "Poison", ["Sludge Bomb", "Brick Break", "Earthquake", "Rock Slide"] )
 Pokemon.initialize(t)
 Pokemon.initialize(v)
@@ -235,5 +235,4 @@ for x in range(10):
     print(t.lvl, t.atk, t.defe, t.spd, t.hp)
     print(v.lvl, v.atk, v.defe, v.spd, v.hp)
 print(pWins)
-#battle(t, v)
-
+battle(t, v)"""

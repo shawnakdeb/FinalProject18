@@ -2,10 +2,10 @@ import pygame
 import random
 import time
 import os
-from block import Grid
-from player import *
+from block import *
+from Player import *
 pygame.init()
-print(os.getcwd())
+#print(os.getcwd())
 gameDisplay = pygame.display.set_mode(((width+1)*grass.get_size()[0], (length+1)*grass.get_size()[1]))
 pygame.mixer.music.load('Route Music.mp3')
 pygame.mixer.music.play(-1)
