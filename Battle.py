@@ -2,9 +2,22 @@ import Pokemon
 from Move import move
 import pygame, math, random
 
+pygame.init()
+
+moves = {
+    'Hydro Pump': move('Hydro Pump', 'Water', 110, 80, 5),
+    'Thunderbolt': move('Thunderbolt', 'Electric', 90, 100, 15),
+    'Bug Buzz': move('Bug Buzz', 'Bug', 90, 100, 15),
+    'Rock Climb': move('Rock Climb', 'Normal', 90, 85, 20),
+    'Sludge Bomb': move('Thunderbolt', 'Electric', 90, 100, 10),
+    'Brick Break': move('Brick Break', 'Fighting', 75, 100, 15),
+    'Earthquake': move('Earthquake', 'Ground', 100, 100, 10),
+    'Rock Slide': move('Rock Slide', 'Rock', 75, 90, 10),
+    'Surf': move('Surf', 'Water', 90, 100, 15),
+}
 
 def turn(atkP, defP, is_user_turn):
-    is_user_turn = False
+#    is_user_turn = False
     print(atkP.species,"is attacking",defP.species,",who has HP =",defP.hp)
     if is_user_turn:
         move = user_move(atkP)
@@ -15,46 +28,18 @@ def turn(atkP, defP, is_user_turn):
     print("Damage to",defP.species,":",damage)
     defP.hp -= damage
     print(defP.species,"HP now =",defP.hp, "\n\n")
-def turn(atkP, defP):
-   print(defP.species,"HP =",defP.hp)
-   move = choose_move(atkP)
-   while (move.m_type == "null"):
-       print ("That is not a move you know")
-       move = choose_move(atkP)
-   damage = calcDamage(atkP, defP, move)
-   print("Damage to",defP.species,":",damage)
-   defP.hp -= damage
-   print(defP.species,"HP now =",defP.hp)
 
 def comp_move(atkP):
     move_name = random.choice(atkP.moves)
     print(move_name)
-    return findMove(move_name)
+    return moves[move_name]
 
 def user_move(atkP):
     move_name = input("What move do you use?")
-    return findMove(move_name)
-
-def findMove(move_name):
-    key = move_name
-
-    moves = {
-        'Hydro Pump': move('Hydro Pump', 'Water', 110, 80, 5),
-        'Thunderbolt': move('Thunderbolt', 'Electric', 90, 100, 15),
-        'Bug Buzz': move('Bug Buzz', 'Bug', 90, 100, 15),
-        'Rock Climb': move('Rock Climb', 'Normal', 90, 85, 20),
-        'Sludge Bomb': move('Thunderbolt', 'Electric', 90, 100, 10),
-        'Brick Break': move('Brick Break', 'Fighting', 75, 100, 15),
-        'Earthquake': move('Earthquake', 'Ground', 100, 100, 10),
-        'Rock Slide': move('Rock Slide', 'Rock', 75, 90, 10),
-        'Surf': move('Surf', 'Water', 90, 100, 15),
-
-    }
-    if key in moves:
-        return moves[key]
-    else:
-        return move('null', 'null', 0, 100, 100)
-
+    while ( not move_name in atkP.moves):
+       print ("That is not a move you know")
+       move_name = input("What move do you use?")
+    return moves[move_name]
 
 def battle(userP, compP):
    while userP.hp > 0 and compP.hp > 0:
@@ -213,8 +198,8 @@ def calcDamage(atkPok, defPok, move):
     return damage     
 
 
-t = Pokemon.Pokemon("Pikachu", 35, 55, 40, 90, 112, "", 100, "Electric", ["Thunderbolt", "Rock Climb", "Surf", "Bug Buzz"] )
-v = Pokemon.Pokemon("Arbok", 60, 95, 69, 80, 157, "", 60, "Poison", ["Sludge Bomb", "Brick Break", "Earthquake", "Rock Slide"] )
+t = Pokemon.Pokemon("Pikachu", 35, 55, 40, 90, 112, "pikachu forward.jpg", 100, "Electric", ["Thunderbolt", "Rock Climb", "Surf", "Bug Buzz"] )
+v = Pokemon.Pokemon("Arbok", 60, 95, 69, 80, 157, "pikachu forward.jpg", 60, "Poison", ["Sludge Bomb", "Brick Break", "Earthquake", "Rock Slide"] )
 Pokemon.initialize(t)
 Pokemon.initialize(v)
 print(t.lvl, t.atk, t.defe, t.spd, t.hp)
@@ -237,3 +222,8 @@ for x in range(10):
 print(pWins)
 #battle(t, v)
 
+running = False
+while running:
+    for e in pygame.event.get():
+        if e.type == pygame.QUIT:
+            running = False

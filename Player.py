@@ -1,9 +1,9 @@
-import math
+import math, random
 import pygame
 pygame.init()
 gameDisplay = pygame.display.set_mode((700, 700))
 from block import Grid
-from Battle import *
+#from Battle import *
 WHITE = (255,255,255)
 grass = pygame.image.load('HGSS_Grass2.png').convert()
 plain = pygame.image.load('plain.png').convert()
@@ -114,7 +114,8 @@ class Player:
                 pygame.display.flip()
                 pygame.time.wait(90)
         if (field.blocks[(int) (self.x - .1736)][(int) (self.y - 0.5)].wild and random.random() < 0.051):
-            battle(t,v)
+            #battle(t,v)
+            pass
     def run (self, direction):
         sprite_list = []
         changex = 0
@@ -148,7 +149,8 @@ class Player:
                 pygame.display.flip()
                 pygame.time.wait(75)
         if (field.blocks[(int) (self.x - .1736)][(int) (self.y - 0.5)].wild and random.random() < 0.51):
-            battle(t,v)
+            #battle(t,v)
+            pass
 
 running = False
 while running:

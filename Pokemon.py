@@ -1,4 +1,5 @@
-import math, random 
+import math, random , pygame
+pygame.init()
 
 class Pokemon:
 
@@ -9,7 +10,8 @@ class Pokemon:
        self.base_defe = base_defe
        self.base_spd = base_spd
        self.base_exp = base_exp
-       self.sprite = sprite
+       self.sprite = pygame.image.load(sprite)
+       self.sprite.set_colorkey((255,255,255))
        self.moves = moves
        self.exp = exp
        self.lvl = 0
@@ -54,4 +56,8 @@ def update_stats(pok, deafPok):
     pok.hp = pok.max_hp - hpLost
 
 
-
+running = False
+while running:
+    for e in pygame.event.get():
+        if e.type == pygame.QUIT:
+            running = False

@@ -6,7 +6,9 @@ from block import Grid
 from player import *
 pygame.init()
 print(os.getcwd())
-gameDisplay = pygame.display.set_mode(((width+1)*grass.get_size()[0], (length+1)*grass.get_size()[1]))
+xsize = (width+1)*grass.get_size()[0]
+ysize = (length+1)*grass.get_size()[1]
+gameDisplay = pygame.display.set_mode((xsize, ysize))
 pygame.mixer.music.load('Route Music.mp3')
 pygame.mixer.music.play(-1)
 Player1 = Player(3,2)
