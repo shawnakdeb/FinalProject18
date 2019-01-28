@@ -38,7 +38,6 @@ class Player:
         gameDisplay.blit(self.sprite, (grass.get_size()[0]*self.x,grass.get_size()[1]*self.y))
     def blit(self):
         gameDisplay.blit(self.sprite, (grass.get_size()[0]*self.x,grass.get_size()[1]*self.y))
-        pygame.draw.circle(gameDisplay, WHITE, (int(grass.get_size()[0]*self.x + (self.sprite.get_size()[0]/2)),int(grass.get_size()[1]*self.y + (self.sprite.get_size()[1]/2))), 2)
     def change_field(self):
         self.field = field_array[self.j][self.i]
         self.field.map_blit()
@@ -144,6 +143,22 @@ class Player:
                 self.field.top_blit(self.x, self.y)
                 pygame.display.flip()
                 pygame.time.wait(75)
+            if (((grass.get_size()[0]*self.x) + (self.sprite.get_size()[0]/2))/grass.get_size()[0] < 0.25):
+                self.x += width + 1
+                self.i -= 1
+                self.change_field()
+            elif (((grass.get_size()[0]*self.x) + (self.sprite.get_size()[0]/2))/grass.get_size()[0] > width+0.75):
+                self.x -= width + 1
+                self.i += 1
+                self.change_field()
+            elif (((grass.get_size()[1]*self.y) + (self.sprite.get_size()[1]/2))/grass.get_size()[1] < 0):
+                self.y += length + 1
+                self.j -= 1
+                self.change_field()
+            elif (((grass.get_size()[1]*self.y) + (self.sprite.get_size()[1]/2))/grass.get_size()[1] > length+0.5):
+                self.y -= length + 1
+                self.j += 1
+                self.change_field()
         #if (self.field.blocks[(int) (self.x + .1736)][(int) (self.y + 0.5)].wild and random.random() < 0.51):
         #    battle(t,v)
 
