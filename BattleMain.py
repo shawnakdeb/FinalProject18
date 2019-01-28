@@ -165,6 +165,10 @@ def rem_background(pok):
         img = pok.sprite.convert()
         #trans_color = img.get_at((0,0))
         img.set_colorkey(WHITE)
+        spixel = pygame.PixelArray(img)
+        spixel.replace(WHITE, (255,255,255), distance = 0.029)
+        spixel.close()
+        img.set_colorkey(WHITE)
         pok.sprite = img
 
 

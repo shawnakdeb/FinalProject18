@@ -7,55 +7,38 @@ from block import *
 
 WHITE = (255,255,255)
 class Player:
-
-    #imports sprite images
-    fs = pygame.image.load('still_front.png').convert()
-    f1 = pygame.image.load('Forward_1.png').convert()
-    f2 = pygame.image.load('Forward_2.png').convert()
-    bs = pygame.image.load('still_back.png').convert()
-    b1 = pygame.image.load('Back_1.png').convert()
-    b2 = pygame.image.load('Back_2.png').convert()
-    ls = pygame.image.load('still_left.png').convert()
-    l1 = pygame.image.load('Left_1.png').convert()
-    l2 = pygame.image.load('Left_2.png').convert()
-    rs = pygame.image.load('still_right.png').convert()
-    r1 = pygame.image.load('Right_1.png').convert()
-    r2 = pygame.image.load('Right_2.png').convert()
-    sprite_list = [fs, f1, f2, bs, b1, b2, ls, l1, l2, rs, r1, r2]
-    sprites_left = [l1,ls,l2,ls]
-    sprites_right = [r1,rs,r2,rs]
-    sprites_forward = [f1,fs,f2,fs]
-    sprites_back = [b1,bs,b2,bs]
-    sprites = [sprites_left, sprites_right, sprites_forward, sprites_back]
-    
-    for l in sprites:
-        for i in range (len(l)):
-            l[i].set_colorkey(WHITE)
-
-    def __init__(self, x, y, color):
+    def __init__(self, x, y, color, dark_color):
+        #imports sprite images
+        self.fs = pygame.image.load('still_front.png').convert()
+        self.f1 = pygame.image.load('Forward_1.png').convert()
+        self.f2 = pygame.image.load('Forward_2.png').convert()
+        self.bs = pygame.image.load('still_back.png').convert()
+        self.b1 = pygame.image.load('Back_1.png').convert()
+        self.b2 = pygame.image.load('Back_2.png').convert()
+        self.ls = pygame.image.load('still_left.png').convert()
+        self.l1 = pygame.image.load('Left_1.png').convert()
+        self.l2 = pygame.image.load('Left_2.png').convert()
+        self.rs = pygame.image.load('still_right.png').convert()
+        self.r1 = pygame.image.load('Right_1.png').convert()
+        self.r2 = pygame.image.load('Right_2.png').convert()
+        self.sprite_list = [self.fs, self.f1, self.f2, self.bs, self.b1, self.b2, self.ls, self.l1, self.l2, self.rs, self.r1, self.r2]
+        self.sprites_left = [self.l1,self.ls,self.l2,self.ls]
+        self.sprites_right = [self.r1,self.rs,self.r2,self.rs]
+        self.sprites_forward = [self.f1,self.fs,self.f2,self.fs]
+        self.sprites_back = [self.b1,self.bs,self.b2,self.bs]
+        self.sprites = [self.sprites_left, self.sprites_right, self.sprites_forward, self.sprites_back]
         RED = (240, 104, 72)
-        BLUE = (77, 129, 214)
-        GREEN = (24, 178, 9)
-        YELLOW = (248, 197, 95)
+        DARKRED = (192,56,56)
         if (not color == RED):
-            if ( color == BLUE):
-                for sprite in self.sprite_list:
-                    sprite.set_colorkey(WHITE)
-                    spixel = pygame.PixelArray(sprite)
-                    spixel.replace(RED, BLUE, distance = 0.178443349898)
-                    spixel.close()
-            if (color == GREEN):
-                for sprite in self.sprite_list:
-                    sprite.set_colorkey(WHITE)
-                    spixel = pygame.PixelArray(sprite)
-                    spixel.replace(RED, color, distance = 0.178443349898)
-                    spixel.close()
-            if (color == YELLOW):
-                for sprite in self.sprite_list:
-                    sprite.set_colorkey(WHITE)
-                    spixel = pygame.PixelArray(sprite)
-                    spixel.replace(RED, color, distance = 0.178443349898)
-                    spixel.close()
+            for sprite in self.sprite_list:
+                sprite.set_colorkey(WHITE)
+                spixel = pygame.PixelArray(sprite)
+                spixel.replace(DARKRED, dark_color)
+                spixel.replace(RED, color, distance = 0.178443349898)
+                spixel.close()
+        else:
+            for sprite in self.sprite_list:
+                sprite.set_colorkey(WHITE)
         self.sprite = self.fs
         self.x = x + .1736
         self.y = y + .5
@@ -91,7 +74,8 @@ class Player:
         from Main import Player_list
         Player_list.sort(key=lambda p: p.y)
         for p in Player_list:
-            p.blit()
+            if (p.field == self.field):
+                p.blit()
         self.field.top_blit(self.x, self.y)
         pygame.display.flip()
     
@@ -128,7 +112,8 @@ class Player:
                 from Main import Player_list
                 Player_list.sort(key=lambda p: p.y)
                 for p in Player_list:
-                    p.blit()
+                    if (p.field == self.field):
+                        p.blit()
                 self.field.top_blit(self.x, self.y)
                 pygame.display.flip()
                 pygame.time.wait(90)
@@ -149,7 +134,10 @@ class Player:
                 self.y -= length + 1
                 self.j += 1
                 self.change_field()
-
+        from Main import p_list
+        for p in p_list:
+            if (p.field == self.field):
+                p.see_player(self.x, self.y)
         #starts wild pokemon encounter if applicable
         #if (in_range((int) (self.x - .1736), (int) (self.y + 0.5)) and self.field.blocks[(int) (self.x - .1736)][(int) (self.y + 0.5)].wild and random.random() < 0.051):
         #    battle(t,v)
@@ -184,7 +172,8 @@ class Player:
                 from Main import Player_list
                 Player_list.sort(key=lambda p: p.y)
                 for p in Player_list:
-                    p.blit()
+                    if (p.field == self.field):
+                        p.blit()
                 self.field.top_blit(self.x, self.y)
                 pygame.display.flip()
                 pygame.time.wait(75)
@@ -204,8 +193,85 @@ class Player:
                 self.y -= length + 1
                 self.j += 1
                 self.change_field()
+        from Main import p_list
+        for p in p_list:
+            if (p.field == self.field):
+                p.see_player(self.x, self.y)
         #if (self.field.blocks[(int) (self.x + .1736)][(int) (self.y + 0.5)].wild and random.random() < 0.51):
         #    battle(t,v)
+
+class Computer_Player(Player):
+    def __init__(self, x, y, field, color, dark_color, direction):
+        Player.__init__(self, x, y, color, dark_color)
+        self.waiting = True
+        self.field = field
+        self.direction = direction
+        if (direction == "up"):
+            self.sprite = (self.bs)
+        elif (direction == "left"):
+            self.sprite = (self.ls)
+        elif (direction == "right"):
+            self.sprite = (self.rs)
+
+    def walk(self, direction):
+        sprite_list = []
+        changex = 0
+        changey = 0
+        #Determines direction
+        if (direction == "left"):
+            sprite_list = self.sprites_left.copy()
+            changex = -0.125
+        elif (direction == "right"):
+            sprite_list = self.sprites_right.copy()
+            changex = 0.125
+        elif (direction == "down"):
+            sprite_list = self.sprites_forward.copy()
+            changey = 0.125
+        else:
+            sprite_list = self.sprites_back.copy()
+            changey = -0.125
+        #if the player can't walk on the tile, the player will walk in place
+        if (not (self.field.can_walk(math.floor(self.x) + (8*changex), math.ceil(self.y) + (8*changey)))):
+            return False            
+        
+        #walking motion (alternating through multiple sprites)
+        for x in range (2):
+            for i in sprite_list:
+                self.field.blit(self.x, self.y)
+                self.x += changex
+                self.y += changey
+                self.sprite = i
+                from Main import Player_list
+                Player_list.sort(key=lambda p: p.y)
+                for p in Player_list:
+                    if (p.field == self.field):
+                        p.blit()
+                self.field.top_blit(self.x, self.y)
+                pygame.display.flip()
+                pygame.time.wait(90)
+    def see_player(self, x, y):
+        can_walk = True
+        if (self.waiting):
+            if (self.direction == "left" and (self.x - x) < 10 and (self.x - x) > 0 and self.y == y):
+                while(can_walk):
+                    if (self.walk(self.direction) == False):
+                        can_walk = False
+                        self.waiting = False
+            elif (self.direction == "right" and (x - self.x) < 10 and (x - self.x) > 0 and self.y == y):
+                while(can_walk):
+                    if (self.walk(self.direction) == False):
+                        can_walk = False
+                        self.waiting = False
+            elif (self.direction == "down" and (y - self.y) < 10 and (y - self.y) > 0 and self.x == x):
+                while(can_walk):
+                    if (self.walk(self.direction) == False):
+                        can_walk = False
+                        self.waiting = False
+            elif (self.direction == "up" and (self.y - y) < 10 and (self.y - y) > 0 and self.x == x):
+                while(can_walk):
+                    if (self.walk(self.direction) == False):
+                        can_walk = False
+                        self.waiting = False
 
 running = False
 while running:
