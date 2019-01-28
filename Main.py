@@ -2,12 +2,12 @@
 
 import pygame
 import random
-import time
 import os
 from block import *
 from Player import *
 from Pokemon import *
 pygame.init()
+import time
 
 #sets up game display
 xsize = (width+1)*grass.get_size()[0]
@@ -27,10 +27,18 @@ DARKGREEN = (24, 178, 9)
 YELLOW = (248, 197, 95)
 DARKYELLOW = (225, 157, 0)
 #Creates the player
-Player1 = Player(3,2, RED, DARKRED, [])
-Player2 = Computer_Player(7,4, field, BLUE, DARKBLUE, "up")
-Player3 = Computer_Player(10,13, field2, GREEN, DARKGREEN, "left")
-Player4 = Computer_Player(5,10, field, YELLOW, DARKYELLOW, "down")
+pika = Pokemon("Pikachu", 35, 55, 40, 90, 112, "pikachu forward2.jpg", 100, "Electric", ["Thunderbolt", "Rock Climb", "Surf", "Bug Buzz"])
+arbok = new_arbok()
+rem_background(pika)
+pika.sprite = size_player_pok(pika.sprite)
+initialize(pika)
+arbok1 = new_arbok()
+arbok2 = new_arbok()
+arbok3 = new_arbok()
+Player1 = Player(3,2, RED, DARKRED, [pika])
+Player2 = Computer_Player(7,4, field, BLUE, DARKBLUE, "up", [arbok1])
+Player3 = Computer_Player(10,13, field2, GREEN, DARKGREEN, "left", [arbok2])
+Player4 = Computer_Player(5,10, field, YELLOW, DARKYELLOW, "down", [arbok3])
 Player_list=[Player1, Player2, Player3, Player4]
 p_list = Player_list.copy()
 p_list.remove(Player1)

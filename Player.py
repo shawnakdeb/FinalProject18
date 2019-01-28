@@ -3,11 +3,12 @@ import pygame
 pygame.init()
 gameDisplay = pygame.display.set_mode((700, 700))
 from block import *
-#from Battle import *
+from BattleMain import *
+from Pokemon import *
 
 WHITE = (255,255,255)
 class Player:
-    def __init__(self, x, y, color, dark_color, pokemon_list:
+    def __init__(self, x, y, color, dark_color, pokemon_list):
         #imports sprite images
         self.fs = pygame.image.load('still_front.png').convert()
         self.f1 = pygame.image.load('Forward_1.png').convert()
@@ -138,10 +139,16 @@ class Player:
         from Main import p_list
         for p in p_list:
             if (p.field == self.field):
-                p.see_player(self.x, self.y)
+                p.see_player(self)
         #starts wild pokemon encounter if applicable
-        #if (in_range((int) (self.x - .1736), (int) (self.y + 0.5)) and self.field.blocks[(int) (self.x - .1736)][(int) (self.y + 0.5)].wild and random.random() < 0.051):
-        #    battle(t,v)
+        if (in_range((int) (self.x - .1736), (int) (self.y + 0.5)) and self.field.blocks[(int) (self.x - .1736)][(int) (self.y + 0.5)].wild and random.random() < 0.051):
+            complete_battle(self.pokemon_list,[new_arbok()])
+            self.field.map_blit()
+            Player_list.sort(key=lambda p: p.y)
+            for p in Player_list:
+                if (p.field == self.field):
+                    p.blit()
+
     
     #the player runs (speed walks) in a given direction
     #same mechanics as walking, except with longer strides and shorter time between steps
@@ -197,9 +204,14 @@ class Player:
         from Main import p_list
         for p in p_list:
             if (p.field == self.field):
-                p.see_player(self.x, self.y)
-        #if (self.field.blocks[(int) (self.x + .1736)][(int) (self.y + 0.5)].wild and random.random() < 0.51):
-        #    battle(t,v)
+                p.see_player(self)
+        if (self.field.blocks[(int) (self.x + .1736)][(int) (self.y + 0.5)].wild and random.random() < 0.51):
+            complete_battle(self.pokemon_list,[new_arbok()])
+            self.field.map_blit()
+            Player_list.sort(key=lambda p: p.y)
+            for p in Player_list:
+                if (p.field == self.field):
+                    p.blit()
 
 class Computer_Player(Player):
     def __init__(self, x, y, field, color, dark_color, direction, pokemon_list):
@@ -250,29 +262,56 @@ class Computer_Player(Player):
                 self.field.top_blit(self.x, self.y)
                 pygame.display.flip()
                 pygame.time.wait(90)
-    def see_player(self, x, y):
+    def see_player(self, User):
         can_walk = True
         if (self.waiting):
-            if (self.direction == "left" and (self.x - x) < 10 and (self.x - x) > 0 and self.y == y):
+            if (self.direction == "left" and (self.x - User.x) < 10 and (self.x - User.x) > 0 and self.y == User.y):
                 while(can_walk):
                     if (self.walk(self.direction) == False):
                         can_walk = False
                         self.waiting = False
-            elif (self.direction == "right" and (x - self.x) < 10 and (x - self.x) > 0 and self.y == y):
+                    complete_battle(User.pokemon_list,self.pokemon_list)
+                    self.field.map_blit()
+                    Player_list.sort(key=lambda p: p.y)
+                    for p in Player_list:
+                        if (p.field == self.field):
+                            p.blit()
+
+            elif (self.direction == "right" and (User.x - self.x) < 10 and (User.x - self.x) > 0 and self.y == User.y):
                 while(can_walk):
                     if (self.walk(self.direction) == False):
                         can_walk = False
                         self.waiting = False
-            elif (self.direction == "down" and (y - self.y) < 10 and (y - self.y) > 0 and self.x == x):
+                complete_battle(User.pokemon_list,self.pokemon_list)
+                self.field.map_blit()
+                Player_list.sort(key=lambda p: p.y)
+                for p in Player_list:
+                    if (p.field == self.field):
+                        p.blit()
+            elif (self.direction == "down" and (User.y - self.y) < 10 and (User.y - self.y) > 0 and self.x == User.x):
                 while(can_walk):
                     if (self.walk(self.direction) == False):
                         can_walk = False
                         self.waiting = False
-            elif (self.direction == "up" and (self.y - y) < 10 and (self.y - y) > 0 and self.x == x):
+                complete_battle(User.pokemon_list,self.pokemon_list)
+                self.field.map_blit()
+                from Main import Player_list
+                Player_list.sort(key=lambda p: p.y)
+                for p in Player_list:
+                    if (p.field == self.field):
+                        p.blit()
+            elif (self.direction == "up" and (self.y - User.y) < 10 and (self.y - User.y) > 0 and self.x == User.x):
                 while(can_walk):
                     if (self.walk(self.direction) == False):
                         can_walk = False
                         self.waiting = False
+                complete_battle(User.pokemon_list,self.pokemon_list)
+                self.field.map_blit()
+                from Main import Player_list
+                Player_list.sort(key=lambda p: p.y)
+                for p in Player_list:
+                    if (p.field == self.field):
+                        p.blit()
 
 running = False
 while running:

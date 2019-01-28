@@ -1,26 +1,32 @@
-import math, random , pygame
+import math, random, pygame
 pygame.init()
 
 class Pokemon:
 
-   def __init__(self, species, base_hp, base_atk, base_defe, base_spd, base_exp, sprite, exp, p_type, moves):
-       self.species = species
-       self.base_hp = base_hp
-       self.base_atk = base_atk
-       self.base_defe = base_defe
-       self.base_spd = base_spd
-       self.base_exp = base_exp
-       self.sprite = pygame.image.load(sprite)
-       self.moves = moves
-       self.exp = exp
-       self.lvl = 0
-       self.atk = 0
-       self.defe = 0
-       self.spd = 0
-       self.hp = 0
-       self.max_hp = 0
-       self.p_type = p_type
-       self.isFainted = False
+    def __init__(self, species, base_hp, base_atk, base_defe, base_spd, base_exp, sprite, exp, p_type, moves):
+        self.species = species
+        self.base_hp = base_hp
+        self.base_atk = base_atk
+        self.base_defe = base_defe
+        self.base_spd = base_spd
+        self.base_exp = base_exp
+        if (type(sprite) == type("")):
+            self.sprite = pygame.image.load(sprite)
+        else:
+            self.sprite = sprite
+        self.moves = moves
+        self.exp = exp
+        self.lvl = 0
+        self.atk = 0
+        self.defe = 0
+        self.spd = 0
+        self.hp = 0
+        self.max_hp = 0
+        self.p_type = p_type
+        self.isFainted = False
+
+def copy(Poke):
+    return Pokemon(Poke.species, Poke.base_hp, Poke.base_atk, Poke.base_defe, Poke.base_spd, Poke.base_exp, Poke.sprite, Poke.exp, Poke.p_type, Poke.moves)
 
 def set_sprite(self, img):
     self.sprite = img
@@ -56,6 +62,13 @@ def update_stats(pok, deafPok):
     calcStats(pok)
     pok.hp = pok.max_hp - hpLost
 
+def new_arbok():
+    from BattleMain import rem_background, double_size
+    arbok = Pokemon("Arbok", 60, 95, 69, 80, 157, "arbok front.png", 60, "Poison", ["Sludge Bomb", "Brick Break", "Earthquake", "Rock Slide"])
+    rem_background(arbok)
+    arbok.sprite = double_size(arbok.sprite)
+    initialize(arbok)
+    return arbok
 
 running = False
 while running:
