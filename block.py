@@ -2,8 +2,11 @@ import pygame
 import math
 import random
 pygame.init()
+
 gameDisplay = pygame.display.set_mode((700, 700))
+
 BLACK = (0,0,0)
+#importing tile images
 grass = pygame.image.load('HGSS_Grass2.png').convert()
 plain = pygame.image.load('plain.png').convert()
 Tree1 = pygame.image.load('Tree1.png').convert()
@@ -20,15 +23,15 @@ Tree2Part = pygame.image.load('Tree2Part.png').convert()
 Tree2Part.set_colorkey(BLACK)
 length = 32
 width = 39
-print(grass.get_size()[1])
-print(grass.get_size()[0])
-print(700/grass.get_size()[1])
-print(900/grass.get_size()[0])
+
+#returns if coordinates are in range of screen
 def in_range(x, y):
     if (x < 0 or x > width or y < 0 or y > length):
         return False
     else:
         return True
+
+#Background tile object
 class Block:
     def __init__(self,x,y,image):
         self.walkable_var = (image == grass or image == plain or image == Tree1 or image == Tree2)
@@ -36,9 +39,12 @@ class Block:
         self.realcoordinates = (image.get_size()[0]*x,image.get_size()[1]*y)
         self.image = image
         self.wild = (image == grass)
+
+    #displays block
     def blit(self):
         gameDisplay.blit(self.image, self.realcoordinates)
 
+    #returns if player can walk on this block
     def walkable(self):
         from Main import Player_list
         walkable2 = True
@@ -47,6 +53,7 @@ class Block:
                 walkable2 = False
         return (self.walkable_var and walkable2)
 
+#Object representing group of blocks
 class Grid:
     def __init__(self, block_list):
         self.blocks = [[]]
@@ -54,10 +61,14 @@ class Grid:
             self.blocks.append([])
             for y in range (len(block_list[x])):
                 self.blocks[x].append(Block(x,y,block_list[x][y]))
+    
+    #displays the entire grid
     def map_blit(self):
         for l in self.blocks:
             for b in range(len(l)):
                 l[b].blit()
+
+    #displays just the tiles that may have changed
     def blit(self, x, y):
         xcoord = [int(math.ceil(x)), int(math.floor(x))]
         ycoord = [int(math.ceil(y)), int(math.floor(y)), int(math.ceil(y))+1]
@@ -65,6 +76,8 @@ class Grid:
             for j in ycoord:
                 if (in_range(i,j)):
                     self.blocks[i][j].blit()
+
+    #displays tree tops if the player is moving under them
     def top_blit(self, x, y):
         xcoord = [int(math.ceil(x)), int(math.floor(x))]
         ycoord = [int(math.ceil(y)), int(math.floor(y)), int(math.ceil(y))+1]
@@ -75,11 +88,14 @@ class Grid:
                         gameDisplay.blit(Tree1Part, self.blocks[i][j].realcoordinates)
                     elif (self.blocks[i][j].image == Tree2):
                         gameDisplay.blit(Tree2Part, self.blocks[i][j].realcoordinates)
+
+    #checks to see if the player can walk on the specified block
     def can_walk(self, x, y):
         if (not in_range(int(x),int(y))):
             return True
         return self.blocks[int(x)][int(y)].walkable()
 
+#creates a clearing on the left side of the screen
 def left_clearing(fieldlist):
     fieldlist[0][length/2] = plain
     fieldlist[1][length/2] = plain
@@ -92,6 +108,7 @@ def left_clearing(fieldlist):
     fieldlist[0][(length/2) - 2] = Tree5
     fieldlist[1][(length/2) - 2] = Tree6
 
+#creates a clearing on the right side of the screen
 def right_clearing(fieldlist):
     fieldlist[width][length/2] = plain
     fieldlist[width-1][length/2] = plain
@@ -104,6 +121,7 @@ def right_clearing(fieldlist):
     fieldlist[width][(length/2) - 2] = Tree6
     fieldlist[width-1][(length/2) - 2] = Tree5
 
+#creates a clearing on the top side of the screen
 def top_clearing(fieldlist):
     fieldlist[int((width+1)/2)][0] = plain
     fieldlist[int((width+1)/2)][1] = plain
@@ -118,6 +136,7 @@ def top_clearing(fieldlist):
     fieldlist[int(((width-1)/2)-1)][1] = plain
     fieldlist[int(((width-1)/2)-1)][2] = plain
 
+#creates a clearing on the bottom side of the screen
 def bottom_clearing(fieldlist):
     fieldlist[int((width+1)/2)][length] = plain
     fieldlist[int((width+1)/2)][length-1] = plain
@@ -132,6 +151,7 @@ def bottom_clearing(fieldlist):
     fieldlist[int(((width-1)/2)-1)][length-1] = plain
     fieldlist[int(((width-1)/2)-1)][length-2] = plain
 
+#returns a list of images to be used to create a new grid object
 def new_field(left, right, top, bottom):
     fieldlist = []
     for x in range(width + 1):
@@ -140,6 +160,7 @@ def new_field(left, right, top, bottom):
             fieldlist[x][y] = None
     for x in range(width + 1):
         for y in range(length + 1):
+            #creates trees
             if ((not ((x == 0 or x == width - 1) and y == length - 2)) and (x%2 == 0 and (y == 0 or y == length - 2))):
                 fieldlist[x][y] = Tree1
             elif ((not ((x == 1 or x == width) and y == length - 2)) and (x%2 == 1 and (y == 0 or y == length - 2))):
@@ -159,6 +180,7 @@ def new_field(left, right, top, bottom):
             elif (x == 2 or x == width - 2 or y == 3):
                 fieldlist[x][y] = plain
             else:
+                #Creates random grass patterns
                 if (random.random()<0.082):
                     for i in range(random.randint(1,3)):
                         for j in range(random.randint(1,3)):
@@ -174,10 +196,14 @@ def new_field(left, right, top, bottom):
                                         fieldlist[x-k][y-l] = grass
                 else:
                     fieldlist[x][y] = None
+    
+    #fills all other tiles with plain tile images
     for x in range(width + 1):
         for y in range(length + 1):
             if (fieldlist[x][y] == None):
                 fieldlist[x][y] = plain
+    
+    #creates clearings
     if (left):
         left_clearing(fieldlist)
     if (right):
@@ -188,6 +214,7 @@ def new_field(left, right, top, bottom):
         bottom_clearing(fieldlist)
     return fieldlist
 
+#creates an array of fields
 field = Grid(new_field(True, True, True, True))
 field2 = Grid(new_field(True, False, False, False))
 field3 = Grid(new_field(False, True, False, False))
