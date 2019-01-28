@@ -21,7 +21,7 @@ Tree2Part.set_colorkey(BLACK)
 length = 12
 width = 15
 def in_range(x, y):
-    if (x == -1 or x == width+1 or y == -1 or y == length+1):
+    if (x < 0 or x > width or y < 0 or y > length):
         return False
     else:
         return True
@@ -55,18 +55,12 @@ class Grid:
             for b in range(len(l)):
                 l[b].blit()
     def blit(self, x, y):
-        if (in_range(int(math.ceil(x)),int(math.ceil(y)))):
-            self.blocks[int(math.ceil(x))][int(math.ceil(y))].blit()
-        if (in_range(int(math.floor(x)),int(math.floor(y)))):
-            self.blocks[int(math.floor(x))][int(math.floor(y))].blit()
-        if (in_range(int(math.floor(x)),int(math.ceil(y)))):
-            self.blocks[int(math.floor(x))][int(math.ceil(y))].blit()
-        if (in_range(int(math.ceil(x)),int(math.floor(y)))):
-            self.blocks[int(math.ceil(x))][int(math.floor(y))].blit()
-        if (in_range(int(math.floor(x)),int(math.ceil(y))+1)):
-            self.blocks[int(math.floor(x))][int(math.ceil(y))+1].blit()
-        if (in_range(int(math.ceil(x)),int(math.ceil(y))+1)):
-            self.blocks[int(math.ceil(x))][int(math.ceil(y))+1].blit()
+        xcoord = [int(math.ceil(x)), int(math.floor(x))]
+        ycoord = [int(math.ceil(y)), int(math.floor(y)), int(math.ceil(y))+1]
+        for i in xcoord:
+            for j in ycoord:
+                if (in_range(i,j)):
+                    self.blocks[i][j].blit()
     def top_blit(self, x, y):
         xcoord = [int(math.ceil(x)), int(math.floor(x))]
         ycoord = [int(math.ceil(y)), int(math.floor(y)), int(math.ceil(y))+1]
@@ -134,37 +128,47 @@ def bottom_clearing(fieldlist):
     fieldlist[int(((width-1)/2)-1)][length-1] = plain
     fieldlist[int(((width-1)/2)-1)][length-2] = plain
 
-fieldlist = []
+def new_field(left, right, top, bottom):
+    fieldlist = []
+    for x in range(width + 1):
+        fieldlist.append({})
+        for y in range(length + 1):
+            if ((not ((x == 0 or x == width - 1) and y == length - 2)) and (x%2 == 0 and (y == 0 or y == length - 2))):
+                fieldlist[x][y] = Tree1
+            elif ((not ((x == 1 or x == width) and y == length - 2)) and (x%2 == 1 and (y == 0 or y == length - 2))):
+                fieldlist[x][y] = Tree2
+            elif ((not ((x == 0 or x == width - 1) and y == 2)) and (x%2 == 0 and (y == 2 or y == length))):
+                fieldlist[x][y] = Tree5
+            elif ((not ((x == 1 or x == width) and y == 2)) and (x%2 == 1 and (y == 2 or y == length))):
+                fieldlist[x][y] = Tree6
+            elif (((x == 0 or x == width - 1) and y%2 == 1) or (x%2 == 0 and (y == 1 or y == length - 1))):
+                fieldlist[x][y] = Tree3
+            elif (((x == 1 or x == width) and y%2 == 1) or (x%2 == 1 and (y == 1 or y == length - 1))):
+                fieldlist[x][y] = Tree4
+            elif ((x == 0 or x == width - 1) and y%2 == 0):
+                fieldlist[x][y] = Tree7
+            elif ((x == 1 or x == width) and y%2 == 0):
+                fieldlist[x][y] = Tree8
+            elif (x == 2 or x == width - 2 or y == 3):
+                fieldlist[x][y] = plain
+            else:
+                fieldlist[x][y] = grass
+    if (left):
+        left_clearing(fieldlist)
+    if (right):
+        right_clearing(fieldlist)
+    if (top):
+        top_clearing(fieldlist)
+    if (bottom):
+        bottom_clearing(fieldlist)
+    return fieldlist
 
-for x in range(width + 1):
-    fieldlist.append({})
-    for y in range(length + 1):
-        if ((not ((x == 0 or x == width - 1) and y == length - 2)) and (x%2 == 0 and (y == 0 or y == length - 2))):
-            fieldlist[x][y] = Tree1
-        elif ((not ((x == 1 or x == width) and y == length - 2)) and (x%2 == 1 and (y == 0 or y == length - 2))):
-            fieldlist[x][y] = Tree2
-        elif ((not ((x == 0 or x == width - 1) and y == 2)) and (x%2 == 0 and (y == 2 or y == length))):
-            fieldlist[x][y] = Tree5
-        elif ((not ((x == 1 or x == width) and y == 2)) and (x%2 == 1 and (y == 2 or y == length))):
-            fieldlist[x][y] = Tree6
-        elif (((x == 0 or x == width - 1) and y%2 == 1) or (x%2 == 0 and (y == 1 or y == length - 1))):
-            fieldlist[x][y] = Tree3
-        elif (((x == 1 or x == width) and y%2 == 1) or (x%2 == 1 and (y == 1 or y == length - 1))):
-            fieldlist[x][y] = Tree4
-        elif ((x == 0 or x == width - 1) and y%2 == 0):
-            fieldlist[x][y] = Tree7
-        elif ((x == 1 or x == width) and y%2 == 0):
-            fieldlist[x][y] = Tree8
-        elif (x == 2 or x == width - 2 or y == 3):
-            fieldlist[x][y] = plain
-        else:
-            fieldlist[x][y] = grass
-left_clearing(fieldlist)
-right_clearing(fieldlist)
-top_clearing(fieldlist)
-bottom_clearing(fieldlist)
-
-field = Grid(fieldlist)
+field = Grid(new_field(True, True, True, True))
+field2 = Grid(new_field(True, False, False, False))
+field3 = Grid(new_field(False, True, False, False))
+field4 = Grid(new_field(False, False, True, False))
+field5 = Grid(new_field(False, False, False, True))
+field_array = [[field, field5, field], [field3, field, field2], [field, field4, field]]
 
 running = False
 while running:

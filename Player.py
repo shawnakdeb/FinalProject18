@@ -27,14 +27,22 @@ class Player:
     for l in sprites:
         for i in range (len(l)):
             l[i].set_colorkey(WHITE)
-    def __init__(self, x, y ):
+    def __init__(self, x, y):
         self.sprite = self.fs
         self.x = x + .1736
         self.y = y + .5
-        field.map_blit()
+        self.i = 1
+        self.j = 1
+        self.field = field_array[self.j][self.i]
+        self.field.map_blit()
         gameDisplay.blit(self.sprite, (grass.get_size()[0]*self.x,grass.get_size()[1]*self.y))
     def blit(self):
         gameDisplay.blit(self.sprite, (grass.get_size()[0]*self.x,grass.get_size()[1]*self.y))
+        pygame.draw.circle(gameDisplay, WHITE, (int(grass.get_size()[0]*self.x + (self.sprite.get_size()[0]/2)),int(grass.get_size()[1]*self.y + (self.sprite.get_size()[1]/2))), 2)
+    def change_field(self):
+        self.field = field_array[self.j][self.i]
+        self.field.map_blit()
+        self.blit()
     def turn(self, direction):
         sprite_list = []
         if (direction == "left"):
@@ -45,13 +53,13 @@ class Player:
             sprite_list = self.sprites_forward.copy()
         else:
             sprite_list = self.sprites_back.copy()
-        field.blit(self.x, self.y)
+        self.field.blit(self.x, self.y)
         self.sprite = sprite_list[1]
         from Main import Player_list
         Player_list.sort(key=lambda p: p.y)
         for p in Player_list:
             p.blit()
-        field.top_blit(self.x, self.y)
+        self.field.top_blit(self.x, self.y)
         pygame.display.flip()
     def walk (self, direction):
         sprite_list = []
@@ -69,12 +77,12 @@ class Player:
         else:
             sprite_list = self.sprites_back.copy()
             changey = -0.125
-        if (not (field.can_walk(math.floor(self.x) + (8*changex), math.ceil(self.y) + (8*changey)))):
+        if (not (self.field.can_walk(math.floor(self.x) + (8*changex), math.ceil(self.y) + (8*changey)))):
             changex = 0
             changey = 0            
         for x in range (2):
             for i in sprite_list:
-                field.blit(self.x, self.y)
+                self.field.blit(self.x, self.y)
                 self.x += changex
                 self.y += changey
                 self.sprite = i
@@ -82,11 +90,28 @@ class Player:
                 Player_list.sort(key=lambda p: p.y)
                 for p in Player_list:
                     p.blit()
-                field.top_blit(self.x, self.y)
+                self.field.top_blit(self.x, self.y)
                 pygame.display.flip()
                 pygame.time.wait(90)
-        if (in_range((int) (self.x - .1736), (int) (self.y - 0.5)) and field.blocks[(int) (self.x - .1736)][(int) (self.y - 0.5)].wild and random.random() < 0.051):
-            battle(t,v)
+            if (((grass.get_size()[0]*self.x) + (self.sprite.get_size()[0]/2))/grass.get_size()[0] < 0.25):
+                self.x += width + 1
+                self.i -= 1
+                self.change_field()
+            elif (((grass.get_size()[0]*self.x) + (self.sprite.get_size()[0]/2))/grass.get_size()[0] > width+0.75):
+                self.x -= width + 1
+                self.i += 1
+                self.change_field()
+            elif (((grass.get_size()[1]*self.y) + (self.sprite.get_size()[1]/2))/grass.get_size()[1] < 0):
+                self.y += length + 1
+                self.j -= 1
+                self.change_field()
+            elif (((grass.get_size()[1]*self.y) + (self.sprite.get_size()[1]/2))/grass.get_size()[1] > length+0.5):
+                self.y -= length + 1
+                self.j += 1
+                self.change_field()
+
+        #if (in_range((int) (self.x - .1736), (int) (self.y + 0.5)) and self.field.blocks[(int) (self.x - .1736)][(int) (self.y + 0.5)].wild and random.random() < 0.051):
+        #    battle(t,v)
     def run (self, direction):
         sprite_list = []
         changex = 0
@@ -103,12 +128,12 @@ class Player:
         else:
             sprite_list = self.sprites_back.copy()
             changey = -0.25
-        if (not (field.can_walk(math.floor(self.x) + (4*changex), math.ceil(self.y) + (4*changey)))):
+        if (not (self.field.can_walk(math.floor(self.x) + (4*changex), math.ceil(self.y) + (4*changey)))):
             changex = 0
             changey = 0            
         for x in range (1):
             for i in sprite_list:
-                field.blit(self.x, self.y)
+                self.field.blit(self.x, self.y)
                 self.x += changex
                 self.y += changey
                 self.sprite = i
@@ -116,11 +141,11 @@ class Player:
                 Player_list.sort(key=lambda p: p.y)
                 for p in Player_list:
                     p.blit()
-                field.top_blit(self.x, self.y)
+                self.field.top_blit(self.x, self.y)
                 pygame.display.flip()
                 pygame.time.wait(75)
-        if (field.blocks[(int) (self.x - .1736)][(int) (self.y - 0.5)].wild and random.random() < 0.51):
-            battle(t,v)
+        #if (self.field.blocks[(int) (self.x + .1736)][(int) (self.y + 0.5)].wild and random.random() < 0.51):
+        #    battle(t,v)
 
 running = False
 while running:

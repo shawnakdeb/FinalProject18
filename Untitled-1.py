@@ -39,6 +39,7 @@ r2.set_colorkey(WHITE)
 grass.set_colorkey(WHITE)
 grass_pos =  {}
 for x in range (10):
+    print(x)
     for y in range (10):
         grass_pos[(x*grass.get_size()[0],y*grass.get_size()[1])] = grass
         gameDisplay.blit(grass, (x*grass.get_size()[0],y*grass.get_size()[1]))
@@ -54,7 +55,7 @@ for x in range (10):
         gameDisplay.blit(grass, (recx+x*grass.get_size()[0],recy+y*grass.get_size()[1]))
 sx = 100
 sy = 100
-gameDisplay.blit(bs, (sx,sy))
+gameDisplay.blit(bs, (0,0))
 while running:
     for e in pygame.event.get():    # get each event in the event queue... 
         """keys = pygame.key.get_pressed()  #checking pressed keys
