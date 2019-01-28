@@ -1,6 +1,7 @@
 import pygame, random
 from pygame import *
 import Pokemon, Move
+from Pokemon import update_stats, restore_hp
 from Battle import * 
 #from Main import xsize, ysize
 pygame.init()
@@ -182,19 +183,31 @@ def choose_move(pok):
         update_text()
 
 def new_turn(user_pok, comp_pok, user_move, comp_move):
+        global choosing_action, choosing_move, big_battle, action
+        action = "nothing"
+        choosing_action = True
+        choosing_move = False
         if user_pok.spd >= comp_pok.spd:
-                comp_damage = calcDamage(user_pok, comp_pok, user_move)
-                comp_pok.hp -= comp_damage
-                blank_text()
-                battle_text = myfont.render(user_pok.species+" used "+user_move+"!",True, BLACK)
-                blit(battle_text, text_blit_pos)
-                update_text()
-                wait(1000)
-                update_opponent(comp_pok)
-                
+                if user_pok.hp > 0:
+                        comp_damage = calcDamage(user_pok, comp_pok, user_move)
+                        comp_pok.hp -= comp_damage
+                        if comp_pok.hp < 0:
+                                comp_pok.hp = 0 
+                        blank_text()
+                        battle_text = myfont.render(user_pok.species+" used "+user_move+"!",True, BLACK)
+                        blit(battle_text, text_blit_pos)
+                        update_text()
+                        wait(1000)
+                        update_opponent(comp_pok)
+                else:
+                        big_battle = False
+                        update_stats(comp_pok, user_pok)
+                        return
                 if comp_pok.hp > 0:
                         user_damage = calcDamage(comp_pok,user_pok, comp_move)
                         user_pok.hp -= user_damage
+                        if user_pok.hp < 0:
+                                user_pok.hp = 0
                         blank_text()
                         battle_text = myfont.render("The opposing "+comp_pok.species+" used "+comp_move+"!",True, BLACK)
                         blit(battle_text, text_blit_pos)
@@ -202,16 +215,48 @@ def new_turn(user_pok, comp_pok, user_move, comp_move):
                         wait(1000)
                         update_player(user_pok)
                 else:
+                        big_battle = False
+                        update_stats(user_pok, comp_pok)
                         return
 
         elif user_pok.spd < comp_pok.spd: 
-                user_damage = calcDamage(comp_pok,user_pok, comp_move)
+                if comp_pok.hp > 0:
+                        user_damage = calcDamage(comp_pok, user_pok, comp_move)
+                        user_pok.hp -= user_damage
+                        if user_pok.hp < 0:
+                                user_pok.hp = 0 
+                        blank_text()
+                        battle_text = myfont.render("The opposing "+comp_pok.species+" used "+comp_move+"!",True, BLACK)
+                        blit(battle_text, text_blit_pos)
+                        update_text()
+                        wait(1000)
+                        update_player(user_pok)
+                else:
+                        big_battle = False
+                        update_stats(user_pok, comp_pok)
+                        return
+                if user_pok.hp > 0:
+                        comp_damage = calcDamage(user_pok,comp_pok, user_move)
+                        comp_pok.hp -= comp_damage
+                        if comp_pok.hp < 0:
+                                comp_pok.hp = 0
+                        blank_text()
+                        battle_text = myfont.render(user_pok.species+" used "+user_move+"!",True, BLACK)
+                        blit(battle_text, text_blit_pos)
+                        update_text()
+                        wait(1000)
+                        update_opponent(comp_pok)
+                else:
+                        big_battle = False
+                        update_stats(comp_pok, user_pok)
+                        return
+                """user_damage = calcDamage(comp_pok,user_pok, comp_move)
                 user_pok.hp -= user_damage
                 if user_pok.hp > 0:
                         comp_damage = calcDamage(user_pok,comp_pok, comp_move)
                         comp_pok.hp -= comp_damage
                 else:
-                        return
+                        return"""
 
 def update_opponent(pok):
         blank_top()
@@ -224,7 +269,7 @@ def update_opponent(pok):
         blit(lvl_text, (200,115))
         blit(hp_text, (200,150))
         blit(name_text, (200,80))
-        
+
         update_top()
 
 
@@ -241,6 +286,19 @@ def update_player(pok):
         blit(name_text, (500,330))
         
         update_bottom()
+
+def restore_all():
+        global big_battle, choosing_action, choosing_move, switching, action
+        restore_hp(active_player_pokemon)
+        restore_hp(active_opp_pokemon)
+        initialize_battle()
+        send_opponent_pokemon(opp_party[0])
+        send_player_pokemon(player_party[0])
+        big_battle = True
+        choosing_action = True
+        choosing_move = False
+        switching = False
+        action = "nothing"
 
 
 pika = Pokemon.Pokemon("Pikachu", 35, 55, 40, 90, 112, "pikachu forward2.jpg", 100, "Electric", ["Thunderbolt", "Rock Climb", "Surf", "Bug Buzz"] )
@@ -264,60 +322,65 @@ choosing_action = True
 choosing_move = False
 switching = False
 action = "nothing"
+while True:
+        while big_battle:
+                user_choose_action(active_player_pokemon)
+                while choosing_action:
+                        for event in pygame.event.get():
+                                if event.type == pygame.QUIT:
+                                        choosing_action = False
+                                        big_battle = False
+                        
+                                key = pygame.key.get_pressed()
+                                
+                                if key[pygame.K_s]:
+                                        action = "switch"
+                                if key[pygame.K_b]:
+                                        action = "battle"
+                                
+                                if action == "battle":
+                                        choose_move(active_player_pokemon)
+                                        choosing_action = False
+                                        choosing_move = True
+                                        print(action)
+                                elif action == "switch": 
+                                        #switch()
+                                        #switching = True
+                                        print(action)        
+                                #action = "nada"
+                        key = None
 
-while big_battle:
-        user_choose_action(active_player_pokemon)
-        while choosing_action:
-                for event in pygame.event.get():
-                        if event.type == pygame.QUIT:
-                                choosing_action = False
-                                big_battle = False
-                
-                        key = pygame.key.get_pressed()
-                        
-                        if key[pygame.K_s]:
-                                action = "switch"
-                        if key[pygame.K_b]:
-                                action = "battle"
-                        
-                        if action == "battle":
-                                choose_move(active_player_pokemon)
-                                choosing_action = False
-                                choosing_move = True
-                                print(action)
-                        elif action == "switch": 
-                                #switch()
-                                #switching = True
-                                print(action)        
-                        #action = "nada"
+                choose_move(active_player_pokemon)
+                while choosing_move:
+                        for event in pygame.event.get():
+                                if event.type == pygame.QUIT:
+                                        choosing_move = False
+                                        big_battle = False
 
-        choose_move(active_player_pokemon)
-        while choosing_move:
-                for event in pygame.event.get():
-                        if event.type == pygame.QUIT:
-                                choosing_move = False
-                                big_battle = False
+                                key = pygame.key.get_pressed()
+                                
+                                if key[pygame.K_1]:
+                                        user_move = active_player_pokemon.moves[0]
+                                        choosing_move = False
+                                        break
+                                elif key[pygame.K_2]:
+                                        user_move = active_player_pokemon.moves[1]
+                                        choosing_move = False
+                                        break
+                                elif key[pygame.K_3]:
+                                        user_move = active_player_pokemon.moves[2]
+                                        choosing_move = False
+                                        break
+                                elif key[pygame.K_4]:
+                                        user_move = active_player_pokemon.moves[3]
+                                        choosing_move = False
+                                        break
+                comp_move = random.choice(active_opp_pokemon.moves)
+                new_turn(active_player_pokemon, active_opp_pokemon, user_move, comp_move)
+                user_move = None
+                comp_move = None
+        restore_all()
 
-                        key = pygame.key.get_pressed()
-                        
-                        if key[pygame.K_1]:
-                                user_move = active_player_pokemon.moves[0]
-                                choosing_move = False
-                                break
-                        elif key[pygame.K_2]:
-                                user_move = active_player_pokemon.moves[1]
-                                choosing_move = False
-                                break
-                        elif key[pygame.K_3]:
-                                user_move = active_player_pokemon.moves[2]
-                                choosing_move = False
-                                break
-                        elif key[pygame.K_4]:
-                                user_move = active_player_pokemon.moves[3]
-                                choosing_move = False
-                                break
-        comp_move = random.choice(active_opp_pokemon.moves)
-        new_turn(active_player_pokemon, active_opp_pokemon, user_move, comp_move)
-        break
-                
-                        
+
+print(active_player_pokemon.species, ": new lvl -- ", active_player_pokemon.lvl)
+print(active_opp_pokemon.species, ": new lvl -- ", active_opp_pokemon.lvl)                        
