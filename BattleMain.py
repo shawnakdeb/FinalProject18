@@ -361,10 +361,7 @@ def complete_battle(player_party, opp_party, trainer):
                                         choose_move(active_player_pokemon)
                                         choosing_action = False
                                         choosing_move = True
-                                        #print(action)
-                                
                         key = None
-
                 choose_move(active_player_pokemon) # displays move possibilities
                 while choosing_move:
                         for event in pygame.event.get():

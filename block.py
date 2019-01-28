@@ -46,12 +46,12 @@ class Block:
         """displays block"""
         gameDisplay.blit(self.image, self.realcoordinates)
 
-    def walkable(self):
+    def walkable(self, this_field):
         """returns if player can walk on this block"""
         from Main import Player_list
         walkable2 = True
         for p in (Player_list):
-            if ((int(math.floor(p.x)),int(math.ceil(p.y))) == self.coordinate):
+            if (p.field == this_field and (int(math.floor(p.x)),int(math.ceil(p.y))) == self.coordinate):
                 walkable2 = False
         return (self.walkable_var and walkable2)
 
@@ -95,7 +95,7 @@ class Grid:
         """checks to see if the player can walk on the specified block"""
         if (not in_range(int(x),int(y))):
             return True
-        return self.blocks[int(x)][int(y)].walkable()
+        return self.blocks[int(x)][int(y)].walkable(self)
 
 def left_clearing(fieldlist):
     """creates a clearing on the left side of the screen"""
