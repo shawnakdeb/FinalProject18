@@ -74,7 +74,8 @@ class Player:
         from Main import Player_list
         Player_list.sort(key=lambda p: p.y)
         for p in Player_list:
-            p.blit()
+            if (p.field == self.field):
+                p.blit()
         self.field.top_blit(self.x, self.y)
         pygame.display.flip()
     
@@ -111,7 +112,8 @@ class Player:
                 from Main import Player_list
                 Player_list.sort(key=lambda p: p.y)
                 for p in Player_list:
-                    p.blit()
+                    if (p.field == self.field):
+                        p.blit()
                 self.field.top_blit(self.x, self.y)
                 pygame.display.flip()
                 pygame.time.wait(90)
@@ -132,7 +134,10 @@ class Player:
                 self.y -= length + 1
                 self.j += 1
                 self.change_field()
-
+        from Main import p_list
+        for p in p_list:
+            if (p.field == self.field):
+                p.see_player(self.x, self.y)
         #starts wild pokemon encounter if applicable
         #if (in_range((int) (self.x - .1736), (int) (self.y + 0.5)) and self.field.blocks[(int) (self.x - .1736)][(int) (self.y + 0.5)].wild and random.random() < 0.051):
         #    battle(t,v)
@@ -167,7 +172,8 @@ class Player:
                 from Main import Player_list
                 Player_list.sort(key=lambda p: p.y)
                 for p in Player_list:
-                    p.blit()
+                    if (p.field == self.field):
+                        p.blit()
                 self.field.top_blit(self.x, self.y)
                 pygame.display.flip()
                 pygame.time.wait(75)
@@ -187,8 +193,85 @@ class Player:
                 self.y -= length + 1
                 self.j += 1
                 self.change_field()
+        from Main import p_list
+        for p in p_list:
+            if (p.field == self.field):
+                p.see_player(self.x, self.y)
         #if (self.field.blocks[(int) (self.x + .1736)][(int) (self.y + 0.5)].wild and random.random() < 0.51):
         #    battle(t,v)
+
+class Computer_Player(Player):
+    def __init__(self, x, y, field, color, dark_color, direction):
+        Player.__init__(self, x, y, color, dark_color)
+        self.waiting = True
+        self.field = field
+        self.direction = direction
+        if (direction == "up"):
+            self.sprite = (self.bs)
+        elif (direction == "left"):
+            self.sprite = (self.ls)
+        elif (direction == "right"):
+            self.sprite = (self.rs)
+
+    def walk(self, direction):
+        sprite_list = []
+        changex = 0
+        changey = 0
+        #Determines direction
+        if (direction == "left"):
+            sprite_list = self.sprites_left.copy()
+            changex = -0.125
+        elif (direction == "right"):
+            sprite_list = self.sprites_right.copy()
+            changex = 0.125
+        elif (direction == "down"):
+            sprite_list = self.sprites_forward.copy()
+            changey = 0.125
+        else:
+            sprite_list = self.sprites_back.copy()
+            changey = -0.125
+        #if the player can't walk on the tile, the player will walk in place
+        if (not (self.field.can_walk(math.floor(self.x) + (8*changex), math.ceil(self.y) + (8*changey)))):
+            return False            
+        
+        #walking motion (alternating through multiple sprites)
+        for x in range (2):
+            for i in sprite_list:
+                self.field.blit(self.x, self.y)
+                self.x += changex
+                self.y += changey
+                self.sprite = i
+                from Main import Player_list
+                Player_list.sort(key=lambda p: p.y)
+                for p in Player_list:
+                    if (p.field == self.field):
+                        p.blit()
+                self.field.top_blit(self.x, self.y)
+                pygame.display.flip()
+                pygame.time.wait(90)
+    def see_player(self, x, y):
+        can_walk = True
+        if (self.waiting):
+            if (self.direction == "left" and (self.x - x) < 10 and (self.x - x) > 0 and self.y == y):
+                while(can_walk):
+                    if (self.walk(self.direction) == False):
+                        can_walk = False
+                        self.waiting = False
+            elif (self.direction == "right" and (x - self.x) < 10 and (x - self.x) > 0 and self.y == y):
+                while(can_walk):
+                    if (self.walk(self.direction) == False):
+                        can_walk = False
+                        self.waiting = False
+            elif (self.direction == "down" and (y - self.y) < 10 and (y - self.y) > 0 and self.x == x):
+                while(can_walk):
+                    if (self.walk(self.direction) == False):
+                        can_walk = False
+                        self.waiting = False
+            elif (self.direction == "up" and (self.y - y) < 10 and (self.y - y) > 0 and self.x == x):
+                while(can_walk):
+                    if (self.walk(self.direction) == False):
+                        can_walk = False
+                        self.waiting = False
 
 running = False
 while running:

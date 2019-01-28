@@ -27,10 +27,9 @@ YELLOW = (248, 197, 95)
 DARKYELLOW = (225, 157, 0)
 #Creates the player
 Player1 = Player(3,2, RED, DARKRED)
-
-Player2 = Player(3,4, BLUE, DARKBLUE)
-Player3 = Player(4,3, GREEN, DARKGREEN)
-Player4 = Player(4,4, YELLOW, DARKYELLOW)
+Player2 = Computer_Player(7,4, field, BLUE, DARKBLUE, "up")
+Player3 = Computer_Player(10,13, field2, GREEN, DARKGREEN, "left")
+Player4 = Computer_Player(5,10, field, YELLOW, DARKYELLOW, "down")
 Player_list=[Player1, Player2, Player3, Player4]
 p_list = Player_list.copy()
 p_list.remove(Player1)
