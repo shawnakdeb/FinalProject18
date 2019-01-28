@@ -35,6 +35,8 @@ class Block:
     """Background tile object"""
     def __init__(self,x,y,image):
         self.walkable_var = (image == grass or image == plain or image == Tree1 or image == Tree2)
+        if y==0 and (image == Tree1 or image == Tree2):
+            self.walkable_var = False
         self.coordinate = (x,y)
         self.realcoordinates = (image.get_size()[0]*x,image.get_size()[1]*y)
         self.image = image
