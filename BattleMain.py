@@ -86,26 +86,31 @@ def move_anim():
 def wait(time):
         pygame.time.wait(time)
 
-def initialize_battle():
-    #flash()
-    draw_rect()    
-    enemy_pos = (900,50)
-    player_pos = (0,290)
-    blit(opponent, enemy_pos)
-    blit(player,player_pos)
-    for x in range(110):
-        blit(battleback,(0,0))
-        draw_rect()
-        enemy_pos = (enemy_pos[0] - 2, enemy_pos[1])
-        player_pos = (player_pos[0] + 1, player_pos[1] )
-        blit(player, player_pos)
-        blit(opponent, enemy_pos)
+def initialize_battle(trainer):
+        #flash()
+        draw_rect()    
+        enemy_pos = (900,50)
+        player_pos = (0,290)
+        if (trainer):
+                blit(opponent, enemy_pos)
+        blit(player,player_pos)
+        for x in range(110):
+                blit(battleback,(0,0))
+                draw_rect()
+                enemy_pos = (enemy_pos[0] - 2, enemy_pos[1])
+                player_pos = (player_pos[0] + 1, player_pos[1] )
+                blit(player, player_pos)
+                if (trainer):
+                        blit(opponent, enemy_pos)
+                flip()
+        if (trainer):
+                text = myfont.render('You\'ve been challenged by an opponent!',True, BLACK)
+        else:
+                text = myfont.render('You\'ve been attacked by a wild pokemon!',True, BLACK)
+        blit(text,text_blit_pos)
         flip()
-    text = myfont.render('You\'ve been challenged by an opponent!',True, BLACK)
-    blit(text,text_blit_pos)
-    flip()
-    wait(2000)
-    blank()    
+        wait(2000)
+        blank()    
 
 def blank():
     blit(battleback,(0,0))
@@ -174,7 +179,7 @@ def rem_background(pok):
 
 def user_choose_action(pok):
         blank_text()
-        choice_text = myfont.render("Battle (b)      Switch (s)",True,BLACK)
+        choice_text = myfont.render("Battle (b)",True,BLACK)
         blit(choice_text, text_blit_pos)
         update_text()
 
@@ -292,7 +297,7 @@ def update_player(pok):
         update_bottom()
 
 def restore_all():
-        global big_battle, choosing_action, choosing_move, switching, action
+        global big_battle, choosing_action, choosing_move, action
         restore_hp(active_player_pokemon)
         restore_hp(active_opp_pokemon)
         initialize_battle()
@@ -301,20 +306,18 @@ def restore_all():
         big_battle = True
         choosing_action = True
         choosing_move = False
-        switching = False
         action = "nothing"
 
 
 
-def complete_battle(player_party, opp_party):
-        global big_battle, choosing_action, choosing_move, switching, action
+def complete_battle(player_party, opp_party, trainer):
+        global big_battle, choosing_action, choosing_move, action
         big_battle = True
-        initialize_battle()
+        initialize_battle(trainer)
         send_opponent_pokemon(opp_party[0])
         send_player_pokemon(player_party[0])
         choosing_action = True
         choosing_move = False
-        switching = False
         action = "nothing"
 
         while big_battle:
