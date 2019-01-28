@@ -25,14 +25,14 @@ length = 32
 width = 39
 
 def in_range(x, y):
-"""returns if coordinates are in range of screen"""
+    """returns if coordinates are in range of screen"""
     if (x < 0 or x > width or y < 0 or y > length):
         return False
     else:
         return True
 
 class Block:
-"""Background tile object"""
+    """Background tile object"""
     def __init__(self,x,y,image):
         self.walkable_var = (image == grass or image == plain or image == Tree1 or image == Tree2)
         self.coordinate = (x,y)
@@ -41,11 +41,11 @@ class Block:
         self.wild = (image == grass)
 
     def blit(self):
-    """displays block"""
+        """displays block"""
         gameDisplay.blit(self.image, self.realcoordinates)
 
     def walkable(self):
-    """returns if player can walk on this block"""
+        """returns if player can walk on this block"""
         from Main import Player_list
         walkable2 = True
         for p in (Player_list):
@@ -63,13 +63,13 @@ class Grid:
                 self.blocks[x].append(Block(x,y,block_list[x][y]))
     
     def map_blit(self):
-    """displays the entire grid"""
+        """displays the entire grid"""
         for l in self.blocks:
             for b in range(len(l)):
                 l[b].blit()
 
     def blit(self, x, y):
-    """displays just the tiles that may have changed"""
+        """displays just the tiles that may have changed"""
         xcoord = [int(math.ceil(x)), int(math.floor(x))]
         ycoord = [int(math.ceil(y)), int(math.floor(y)), int(math.ceil(y))+1]
         for i in xcoord:
@@ -78,7 +78,7 @@ class Grid:
                     self.blocks[i][j].blit()
 
     def top_blit(self, x, y):
-    """displays tree tops if the player is moving under them"""
+        """displays tree tops if the player is moving under them"""
         xcoord = [int(math.ceil(x)), int(math.floor(x))]
         ycoord = [int(math.ceil(y)), int(math.floor(y)), int(math.ceil(y))+1]
         for i in xcoord:
@@ -90,7 +90,7 @@ class Grid:
                         gameDisplay.blit(Tree2Part, self.blocks[i][j].realcoordinates)
 
     def can_walk(self, x, y):
-    """checks to see if the player can walk on the specified block"""
+        """checks to see if the player can walk on the specified block"""
         if (not in_range(int(x),int(y))):
             return True
         return self.blocks[int(x)][int(y)].walkable()
@@ -122,7 +122,7 @@ def right_clearing(fieldlist):
     fieldlist[width-1][(length/2) - 2] = Tree5
 
 def top_clearing(fieldlist):
-"""creates a clearing on the top side of the screen"""
+    """creates a clearing on the top side of the screen"""
     fieldlist[int((width+1)/2)][0] = plain
     fieldlist[int((width+1)/2)][1] = plain
     fieldlist[int((width+1)/2)][2] = plain

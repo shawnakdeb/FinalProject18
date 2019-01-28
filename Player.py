@@ -8,7 +8,7 @@ from Pokemon import *
 
 WHITE = (255,255,255)
 class Player:
-    """Object for the users player"""
+    """Object for the users player	"""
     def __init__(self, x, y, color, dark_color, pokemon_list):
         #imports sprite images
         self.fs = pygame.image.load('still_front.png').convert()
@@ -52,17 +52,17 @@ class Player:
         gameDisplay.blit(self.sprite, (grass.get_size()[0]*self.x,grass.get_size()[1]*self.y))
     
     def blit(self):
-    """displays current sprite of player"""
+        """displays current sprite of player"""
         gameDisplay.blit(self.sprite, (grass.get_size()[0]*self.x,grass.get_size()[1]*self.y))
-    
+
     def change_field(self):
-    """changes which grid the player is on"""
+        """changes which grid the player is on"""
         self.field = field_array[self.j][self.i]
         self.field.map_blit()
         self.blit()
     
     def turn(self, direction):
-    """the player turns in a given direction"""
+        """the player turns in a given direction"""
         sprite_list = []
         if (direction == "left"):
             sprite_list = self.sprites_left.copy()
@@ -81,9 +81,9 @@ class Player:
                 p.blit()
         self.field.top_blit(self.x, self.y)
         pygame.display.flip()
-    
+
     def walk (self, direction):
-    """the player walks in a given direction"""
+        """the player walks in a given direction"""
         sprite_list = []
         changex = 0
         changey = 0
@@ -151,8 +151,8 @@ class Player:
                     p.blit()
 
     def run (self, direction):
-    """the player runs (speed walks) in a given direction
-    same mechanics as walking, except with longer strides and shorter time between steps"""
+        """the player runs (speed walks) in a given direction
+        same mechanics as walking, except with longer strides and shorter time between steps	"""
         sprite_list = []
         changex = 0
         changey = 0
@@ -228,7 +228,7 @@ class Computer_Player(Player):
             self.sprite = (self.rs)
 
     def walk(self, direction):
-    """same as super but stops when it cant walk anymore"""
+        """same as super but stops when it cant walk anymore"""
         sprite_list = []
         changex = 0
         changey = 0
@@ -248,7 +248,7 @@ class Computer_Player(Player):
         #if the player can't walk on the tile, the npc stops
         if (not (self.field.can_walk(math.floor(self.x) + (8*changex), math.ceil(self.y) + (8*changey)))):
             return False            
-        
+
         #walking motion (alternating through multiple sprites)
         for x in range (2):
             for i in sprite_list:
@@ -264,9 +264,8 @@ class Computer_Player(Player):
                 self.field.top_blit(self.x, self.y)
                 pygame.display.flip()
                 pygame.time.wait(90)
-    
     def see_player(self, User):
-    """checks if you are within the sight of any npc"""
+        """checks if you are within the sight of any npc"""
         can_walk = True
         if (self.waiting):
             if (self.direction == "left" and (self.x - User.x) < 10 and (self.x - User.x) > 0 and self.y == User.y):

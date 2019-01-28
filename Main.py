@@ -68,7 +68,7 @@ while running:
             Player1.run("up")
         if keys[pygame.K_DOWN]:
             Player1.run("down")
-        if keys[pygame.K_LEFT]:
+        if keys[pygame.K_LEFT]:       
             Player1.run("left")
         if keys[pygame.K_RIGHT]:
             Player1.run("right")
