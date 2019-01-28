@@ -1,9 +1,4 @@
 # Intro to Programming Final Project - Fall 2018
+## Pokemon Python - Shawnak Deb and Rohan Setia
 
-* Project details are in description.md
-* Replace the content of this file with your own info about your project before the due date
-* Don't forget to fill out the [Project Proposal Form](https://airtable.com/shrrdA41unoBvi6Ki) before break.
-
-## Setting Up Your Repo
-
-On the GitHub page for this repository, click the "Fork" button. This will create your own copy of this repository, linked to my original. Use the same cloning method we used before to clone the repository to your PythonAnywhere account
+  This project is a primitive pokemon game based on the game by Nintendo, Game Freak, and Creatures. The game includes both a small-scale overworld and battles. The overworld consists of un-traversable trees, eventless "plain" blocks, wild pokemon grass blocks, and player sprites. The user can manipulate the player sprite with the arrow keys. Holding the space bar while using the arrow keys allows the player to run. If the user leaves the field they are currently on through one of the connecting paths between trees, they move on to an adjacent field with a different randomly selected grass pattern. While running over grass blocks, there is a probablity of encountering a wild pokemon, in which case a battle ensues. Trainer battles can also occur if the player is "seen" by an idle trainer. In battles, the player has the option to choose out of 4 moves for their pokemon or to switch out pokemon. The player begins with a set of preselected pokemon (catching pokemon hs not yet been implemented). In order to begin the program run the Main.py file (all necessary files are included in the repository).
