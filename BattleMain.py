@@ -2,8 +2,8 @@ import pygame, random
 from pygame import *
 import Pokemon, Move
 from Pokemon import update_stats, restore_hp
-from Battle import * 
-#from Main import xsize, ysize
+from Battle import calcDamage
+
 pygame.init()
 pygame.font.init()
 myfont = pygame.font.SysFont('Times New Roman',50)
@@ -104,7 +104,7 @@ def initialize_battle():
     text = myfont.render('You\'ve been challenged by an opponent!',True, BLACK)
     blit(text,text_blit_pos)
     flip()
-    #wait(2000)
+    wait(2000)
     blank()    
 
 def blank():
@@ -131,7 +131,7 @@ def send_opponent_pokemon(pok):
         
         update_top()
         update_text()
-        #wait(2000)
+        wait(2000)
 
 def send_player_pokemon(pok):
         global active_player_pokemon
@@ -152,7 +152,7 @@ def send_player_pokemon(pok):
         
         update_text()
         update_bottom()
-        #wait(2000)
+        wait(2000)
 
 
 def double_size(img):
@@ -305,28 +305,18 @@ def restore_all():
         action = "nothing"
 
 
-pika = Pokemon.Pokemon("Pikachu", 35, 55, 40, 90, 112, "pikachu forward2.jpg", 100, "Electric", ["Thunderbolt", "Rock Climb", "Surf", "Bug Buzz"] )
-arbok = Pokemon.Pokemon("Arbok", 60, 95, 69, 80, 157, "arbok front.png", 60, "Poison", ["Sludge Bomb", "Brick Break", "Earthquake", "Rock Slide"] )
-rem_background(arbok)
-rem_background(pika)
-pika.sprite = size_player_pok(pika.sprite)
-arbok.sprite = double_size(arbok.sprite)
-Pokemon.initialize(pika)
-Pokemon.initialize(arbok)
 
-opp_party = [arbok]
-player_party = [pika]
+def complete_battle(player_party, opp_party):
+        global big_battle, choosing_action, choosing_move, switching, action
+        big_battle = True
+        initialize_battle()
+        send_opponent_pokemon(opp_party[0])
+        send_player_pokemon(player_party[0])
+        choosing_action = True
+        choosing_move = False
+        switching = False
+        action = "nothing"
 
-initialize_battle()
-send_opponent_pokemon(opp_party[0])
-send_player_pokemon(player_party[0])
-
-big_battle = True
-choosing_action = True
-choosing_move = False
-switching = False
-action = "nothing"
-while True:
         while big_battle:
                 user_choose_action(active_player_pokemon)
                 while choosing_action:
@@ -383,8 +373,23 @@ while True:
                 new_turn(active_player_pokemon, active_opp_pokemon, user_move, comp_move)
                 user_move = None
                 comp_move = None
-        restore_all()
+        
 
 
+pika = Pokemon.Pokemon("Pikachu", 35, 55, 40, 90, 112, "pikachu forward2.jpg", 100, "Electric", ["Thunderbolt", "Rock Climb", "Surf", "Bug Buzz"] )
+arbok = Pokemon.Pokemon("Arbok", 60, 95, 69, 80, 157, "arbok front.png", 60, "Poison", ["Sludge Bomb", "Brick Break", "Earthquake", "Rock Slide"] )
+rem_background(arbok)
+rem_background(pika)
+pika.sprite = size_player_pok(pika.sprite)
+arbok.sprite = double_size(arbok.sprite)
+Pokemon.initialize(pika)
+Pokemon.initialize(arbok)
+
+opp_party = [arbok]
+player_party = [pika]
+
+complete_battle(player_party, opp_party)
+
+"""
 print(active_player_pokemon.species, ": new lvl -- ", active_player_pokemon.lvl)
-print(active_opp_pokemon.species, ": new lvl -- ", active_opp_pokemon.lvl)                        
+print(active_opp_pokemon.species, ": new lvl -- ", active_opp_pokemon.lvl)                        """

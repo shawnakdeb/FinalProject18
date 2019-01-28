@@ -2,52 +2,62 @@ import Pokemon
 from Move import move
 import pygame, math, random
 
+pygame.init()
 
-def turn(atkP, defP):
-   print(defP.species,"HP =",defP.hp)
-   move = choose_move(atkP)
-   while (move.m_type == "null"):
-       print ("That is not a move you know")
-       move = choose_move(atkP)
-   damage = calcDamage(atkP, defP, move)
-   print("Damage to",defP.species,":",damage)
-   defP.hp -= damage
-   print(defP.species,"HP now =",defP.hp)
+moves = {
+    'Hydro Pump': move('Hydro Pump', 'Water', 110, 80, 5),
+    'Thunderbolt': move('Thunderbolt', 'Electric', 90, 100, 15),
+    'Bug Buzz': move('Bug Buzz', 'Bug', 90, 100, 15),
+    'Rock Climb': move('Rock Climb', 'Normal', 90, 85, 20),
+    'Sludge Bomb': move('Thunderbolt', 'Electric', 90, 100, 10),
+    'Brick Break': move('Brick Break', 'Fighting', 75, 100, 15),
+    'Earthquake': move('Earthquake', 'Ground', 100, 100, 10),
+    'Rock Slide': move('Rock Slide', 'Rock', 75, 90, 10),
+    'Surf': move('Surf', 'Water', 90, 100, 15),
+}
 
+def turn(atkP, defP, is_user_turn):
+#    is_user_turn = False
+#    print(atkP.species,"is attacking",defP.species,",who has HP =",defP.hp
+    damage = calcDamage(atkP, defP, move)
+#    print("Damage to",defP.species,":",damage)
+    defP.hp -= damage
+#    print(defP.species,"HP now =",defP.hp, "\n\n")
 
-def choose_move(atkP):
+def comp_move(atkP):
+    move_name = random.choice(atkP.moves)
+    print(move_name)
+    return moves[move_name]
+
+def user_move(atkP):
     move_name = input("What move do you use?")
-    return findMove(move_name)
-
-def findMove(move_name):
-    key = move_name
-
-    moves = {
-        'Hydro Pump': move('Hydro Pump', 'Water', 110, 80, 5),
-        'Thunderbolt': move('Thunderbolt', 'Electric', 90, 100, 15)
-    }
-    if key in moves:
-        return moves[key]
-    else:
-        return move('null', 'null', 0, 100, 100)
-
+    while ( not move_name in atkP.moves):
+       print ("That is not a move you know")
+       move_name = input("What move do you use?")
+    return moves[move_name]
 
 def battle(userP, compP):
    while userP.hp > 0 and compP.hp > 0:
-       if userP.spd >= compP.spd:
-           turn(userP, compP)
+        if userP.spd >= compP.spd:
+           turn(userP, compP, True)
            if compP.hp <= 0:
-               break
-           turn(compP, userP)
-       else:
-           turn(compP, userP)
-           if compP.hp <= 0:
-               break
-           turn(userP, compP)
+               return userP
+           turn(compP, userP, False)
+        else:
+           turn(compP, userP, False)
+           if userP.hp <= 0:
+               return compP
+           turn(userP, compP, True)
+        
+        if userP.hp <= 0:
+            return compP
+        if compP.hp <= 0:
+            return userP
   
 
 def calcMultiplier(move, defPok):
     key = (move.m_type, defPok.p_type)
+    
     multiplier = 1
     check = {
         ('Fire', 'Water') : 0.5,
@@ -153,27 +163,66 @@ def calcMultiplier(move, defPok):
     return multiplier
 
 def calcDamage(atkPok, defPok, move):
-    typeMult = calcMultiplier(move, defPok)
+    move_c = moves[move]
+    typeMult = calcMultiplier(move_c, defPok)
+
+    #print("Type Mod:",typeMult)
     
     randMult = random.randint(217, 255) / 255.0
     
+   # print("Rand Mod:",randMult)
+
     STABMult = 1
-    if(move.m_type == atkPok.p_type):
+    if(move_c.m_type == atkPok.p_type):
         STABMult = 1.5
-    
+    #print("STAB Mod:",STABMult)
+
     critMult = 1
     crit_prob = atkPok.base_spd / 512.0
     if random.random() < crit_prob:
         critMult = 2 
 
-    mod = typeMult * randMult * STABMult * critMult
+   # print("Crit Mod:",critMult)
 
-    damage = math.floor(mod * ( (2*atkPok.lvl/5 + 2) * move.power * atkPok.atk / defPok.defe / 50 + 2))
+    accMult = 1
+    if random.randint(1,100) > move_c.accuracy:
+        accMult = 0
+  #  print("Acc Mod:",accMult)
+
+    mod = typeMult * randMult * STABMult * critMult * accMult
+   # print("Dam Mod:",mod)
+    damage = math.floor(mod * ( (2*atkPok.lvl/5 + 2) * move_c.power * atkPok.atk / defPok.defe / 50 + 2))
     return damage     
 
 
+pika = Pokemon.Pokemon("Pikachu", 35, 55, 40, 90, 112, "pikachu forward.jpg", 100, "Electric", ["Thunderbolt", "Rock Climb", "Surf", "Bug Buzz"] )
+arbok = Pokemon.Pokemon("Arbok", 60, 95, 69, 80, 157, "arbok front.png", 60, "Poison", ["Sludge Bomb", "Brick Break", "Earthquake", "Rock Slide"] )
+Pokemon.initialize(pika)
+Pokemon.initialize(arbok)
+"""print(t.lvl, t.atk, t.defe, t.spd, t.hp)
+print(v.lvl, v.atk, v.defe, v.spd, v.hp)
+"""
+aWins = 0
+pWins = 0
+"""for x in range(10):
+    winner = battle(t, v)
+    print(winner.species,"wins")
+    if winner.species == "Pikachu":
+        pWins+=1
+        Pokemon.update_stats(t,v)
+    else:
+        aWins+=1
+        Pokemon.update_stats(v,t)
+    Pokemon.restore_hp(t)
+    Pokemon.restore_hp(v)
+    print(t.lvl, t.atk, t.defe, t.spd, t.hp)
+    print(v.lvl, v.atk, v.defe, v.spd, v.hp)
+print(pWins)"""
+#battle(t, v)
+"""
 running = False
 while running:
     for e in pygame.event.get():
         if e.type == pygame.QUIT:
             running = False
+"""
