@@ -2,8 +2,8 @@ import pygame
 import random
 import time
 import os
-from block import Grid
-from player import *
+from block import *
+from Player import *
 pygame.init()
 print(os.getcwd())
 xsize = (width+1)*grass.get_size()[0]

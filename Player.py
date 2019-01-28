@@ -2,38 +2,10 @@ import math, random
 import pygame
 pygame.init()
 gameDisplay = pygame.display.set_mode((700, 700))
-from block import Grid
-#from Battle import *
+from block import *
+from Battle import *
+
 WHITE = (255,255,255)
-grass = pygame.image.load('HGSS_Grass2.png').convert()
-plain = pygame.image.load('plain.png').convert()
-fieldlist = []
-length = 12
-width = 15
-for x in range(width+1):
-    fieldlist.append({})
-    for y in range(length+1):
-        if ((not ((x == 0 or x == width - 1) and y == length - 2)) and (x%2 == 0 and (y == 0 or y == length - 2))):
-            fieldlist[x][y] = ((pygame.image.load('Tree1.png').convert()), True, False)
-        elif ((not ((x == 1 or x == width) and y == length - 2)) and (x%2 == 1 and (y == 0 or y == length - 2))):
-            fieldlist[x][y] = ((pygame.image.load('Tree2.png').convert()), True, False)
-        elif ((not ((x == 0 or x == width - 1) and y == 2)) and (x%2 == 0 and (y == 2 or y == length))):
-            fieldlist[x][y] = ((pygame.image.load('Tree5.png').convert()), False, False)
-        elif ((not ((x == 1 or x == width) and y == 2)) and (x%2 == 1 and (y == 2 or y == length))):
-            fieldlist[x][y] = ((pygame.image.load('Tree6.png').convert()), False, False)
-        elif (((x == 0 or x == width - 1) and y%2 == 1) or (x%2 == 0 and (y == 1 or y == length - 1))):
-            fieldlist[x][y] = ((pygame.image.load('Tree3.png').convert()), False, False)
-        elif (((x == 1 or x == width) and y%2 == 1) or (x%2 == 1 and (y == 1 or y == length - 1))):
-            fieldlist[x][y] = ((pygame.image.load('Tree4.png').convert()), False, False)
-        elif ((x == 0 or x == width - 1) and y%2 == 0):
-            fieldlist[x][y] = ((pygame.image.load('Tree7.png').convert()), False, False)
-        elif ((x == 1 or x == width) and y%2 == 0):
-            fieldlist[x][y] = ((pygame.image.load('Tree8.png').convert()), False, False)
-        elif (x == 2 or x == width - 2 or y == 3):
-            fieldlist[x][y] = (plain, True, False)
-        else:    
-            fieldlist[x][y] = (grass, True, True)
-field = Grid(fieldlist)
 class Player:
     fs = pygame.image.load('still_front.png').convert()
     f1 = pygame.image.load('Forward_1.png').convert()
@@ -55,14 +27,21 @@ class Player:
     for l in sprites:
         for i in range (len(l)):
             l[i].set_colorkey(WHITE)
-    def __init__(self, x, y ):
+    def __init__(self, x, y):
         self.sprite = self.fs
         self.x = x + .1736
         self.y = y + .5
-        field.map_blit()
+        self.i = 1
+        self.j = 1
+        self.field = field_array[self.j][self.i]
+        self.field.map_blit()
         gameDisplay.blit(self.sprite, (grass.get_size()[0]*self.x,grass.get_size()[1]*self.y))
     def blit(self):
         gameDisplay.blit(self.sprite, (grass.get_size()[0]*self.x,grass.get_size()[1]*self.y))
+    def change_field(self):
+        self.field = field_array[self.j][self.i]
+        self.field.map_blit()
+        self.blit()
     def turn(self, direction):
         sprite_list = []
         if (direction == "left"):
@@ -73,13 +52,13 @@ class Player:
             sprite_list = self.sprites_forward.copy()
         else:
             sprite_list = self.sprites_back.copy()
-        field.blit(self.x, self.y)
+        self.field.blit(self.x, self.y)
         self.sprite = sprite_list[1]
         from Main import Player_list
         Player_list.sort(key=lambda p: p.y)
         for p in Player_list:
             p.blit()
-        field.top_blit(self.x, self.y)
+        self.field.top_blit(self.x, self.y)
         pygame.display.flip()
     def walk (self, direction):
         sprite_list = []
@@ -97,12 +76,12 @@ class Player:
         else:
             sprite_list = self.sprites_back.copy()
             changey = -0.125
-        if (not (field.can_walk(math.floor(self.x) + (8*changex), math.ceil(self.y) + (8*changey)))):
+        if (not (self.field.can_walk(math.floor(self.x) + (8*changex), math.ceil(self.y) + (8*changey)))):
             changex = 0
             changey = 0            
         for x in range (2):
             for i in sprite_list:
-                field.blit(self.x, self.y)
+                self.field.blit(self.x, self.y)
                 self.x += changex
                 self.y += changey
                 self.sprite = i
@@ -110,12 +89,28 @@ class Player:
                 Player_list.sort(key=lambda p: p.y)
                 for p in Player_list:
                     p.blit()
-                field.top_blit(self.x, self.y)
+                self.field.top_blit(self.x, self.y)
                 pygame.display.flip()
                 pygame.time.wait(90)
-        if (field.blocks[(int) (self.x - .1736)][(int) (self.y - 0.5)].wild and random.random() < 0.051):
-            #battle(t,v)
-            pass
+            if (((grass.get_size()[0]*self.x) + (self.sprite.get_size()[0]/2))/grass.get_size()[0] < 0.25):
+                self.x += width + 1
+                self.i -= 1
+                self.change_field()
+            elif (((grass.get_size()[0]*self.x) + (self.sprite.get_size()[0]/2))/grass.get_size()[0] > width+0.75):
+                self.x -= width + 1
+                self.i += 1
+                self.change_field()
+            elif (((grass.get_size()[1]*self.y) + (self.sprite.get_size()[1]/2))/grass.get_size()[1] < 0):
+                self.y += length + 1
+                self.j -= 1
+                self.change_field()
+            elif (((grass.get_size()[1]*self.y) + (self.sprite.get_size()[1]/2))/grass.get_size()[1] > length+0.5):
+                self.y -= length + 1
+                self.j += 1
+                self.change_field()
+
+        #if (in_range((int) (self.x - .1736), (int) (self.y + 0.5)) and self.field.blocks[(int) (self.x - .1736)][(int) (self.y + 0.5)].wild and random.random() < 0.051):
+        #    battle(t,v)
     def run (self, direction):
         sprite_list = []
         changex = 0
@@ -132,12 +127,12 @@ class Player:
         else:
             sprite_list = self.sprites_back.copy()
             changey = -0.25
-        if (not (field.can_walk(math.floor(self.x) + (4*changex), math.ceil(self.y) + (4*changey)))):
+        if (not (self.field.can_walk(math.floor(self.x) + (4*changex), math.ceil(self.y) + (4*changey)))):
             changex = 0
             changey = 0            
         for x in range (1):
             for i in sprite_list:
-                field.blit(self.x, self.y)
+                self.field.blit(self.x, self.y)
                 self.x += changex
                 self.y += changey
                 self.sprite = i
@@ -145,12 +140,27 @@ class Player:
                 Player_list.sort(key=lambda p: p.y)
                 for p in Player_list:
                     p.blit()
-                field.top_blit(self.x, self.y)
+                self.field.top_blit(self.x, self.y)
                 pygame.display.flip()
                 pygame.time.wait(75)
-        if (field.blocks[(int) (self.x - .1736)][(int) (self.y - 0.5)].wild and random.random() < 0.51):
-            #battle(t,v)
-            pass
+            if (((grass.get_size()[0]*self.x) + (self.sprite.get_size()[0]/2))/grass.get_size()[0] < 0.25):
+                self.x += width + 1
+                self.i -= 1
+                self.change_field()
+            elif (((grass.get_size()[0]*self.x) + (self.sprite.get_size()[0]/2))/grass.get_size()[0] > width+0.75):
+                self.x -= width + 1
+                self.i += 1
+                self.change_field()
+            elif (((grass.get_size()[1]*self.y) + (self.sprite.get_size()[1]/2))/grass.get_size()[1] < 0):
+                self.y += length + 1
+                self.j -= 1
+                self.change_field()
+            elif (((grass.get_size()[1]*self.y) + (self.sprite.get_size()[1]/2))/grass.get_size()[1] > length+0.5):
+                self.y -= length + 1
+                self.j += 1
+                self.change_field()
+        #if (self.field.blocks[(int) (self.x + .1736)][(int) (self.y + 0.5)].wild and random.random() < 0.51):
+        #    battle(t,v)
 
 running = False
 while running:
