@@ -86,26 +86,31 @@ def move_anim():
 def wait(time):
         pygame.time.wait(time)
 
-def initialize_battle():
-    #flash()
-    draw_rect()    
-    enemy_pos = (900,50)
-    player_pos = (0,290)
-    blit(opponent, enemy_pos)
-    blit(player,player_pos)
-    for x in range(110):
-        blit(battleback,(0,0))
-        draw_rect()
-        enemy_pos = (enemy_pos[0] - 2, enemy_pos[1])
-        player_pos = (player_pos[0] + 1, player_pos[1] )
-        blit(player, player_pos)
-        blit(opponent, enemy_pos)
+def initialize_battle(trainer):
+        #flash()
+        draw_rect()    
+        enemy_pos = (900,50)
+        player_pos = (0,290)
+        if (trainer):
+                blit(opponent, enemy_pos)
+        blit(player,player_pos)
+        for x in range(110):
+                blit(battleback,(0,0))
+                draw_rect()
+                enemy_pos = (enemy_pos[0] - 2, enemy_pos[1])
+                player_pos = (player_pos[0] + 1, player_pos[1] )
+                blit(player, player_pos)
+                if (trainer):
+                        blit(opponent, enemy_pos)
+                flip()
+        if (trainer):
+                text = myfont.render('You\'ve been challenged by an opponent!',True, BLACK)
+        else:
+                text = myfont.render('You\'ve been attacked by a wild pokemon!',True, BLACK)
+        blit(text,text_blit_pos)
         flip()
-    text = myfont.render('You\'ve been challenged by an opponent!',True, BLACK)
-    blit(text,text_blit_pos)
-    flip()
-    wait(2000)
-    blank()    
+        wait(2000)
+        blank()    
 
 def blank():
     blit(battleback,(0,0))
@@ -306,10 +311,10 @@ def restore_all():
 
 
 
-def complete_battle(player_party, opp_party):
+def complete_battle(player_party, opp_party, trainer):
         global big_battle, choosing_action, choosing_move, switching, action
         big_battle = True
-        initialize_battle()
+        initialize_battle(trainer)
         send_opponent_pokemon(opp_party[0])
         send_player_pokemon(player_party[0])
         choosing_action = True
@@ -373,6 +378,7 @@ def complete_battle(player_party, opp_party):
                 new_turn(active_player_pokemon, active_opp_pokemon, user_move, comp_move)
                 user_move = None
                 comp_move = None
+                
         
 
 

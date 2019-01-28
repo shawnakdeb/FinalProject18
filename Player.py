@@ -142,7 +142,7 @@ class Player:
                 p.see_player(self)
         #starts wild pokemon encounter if applicable
         if (in_range((int) (self.x - .1736), (int) (self.y + 0.5)) and self.field.blocks[(int) (self.x - .1736)][(int) (self.y + 0.5)].wild and random.random() < 0.051):
-            complete_battle(self.pokemon_list,[new_arbok()])
+            complete_battle(self.pokemon_list,[new_arbok()], False)
             self.field.map_blit()
             Player_list.sort(key=lambda p: p.y)
             for p in Player_list:
@@ -206,7 +206,7 @@ class Player:
             if (p.field == self.field):
                 p.see_player(self)
         if (self.field.blocks[(int) (self.x + .1736)][(int) (self.y + 0.5)].wild and random.random() < 0.51):
-            complete_battle(self.pokemon_list,[new_arbok()])
+            complete_battle(self.pokemon_list,[new_arbok()], False)
             self.field.map_blit()
             Player_list.sort(key=lambda p: p.y)
             for p in Player_list:
@@ -270,7 +270,7 @@ class Computer_Player(Player):
                     if (self.walk(self.direction) == False):
                         can_walk = False
                         self.waiting = False
-                    complete_battle(User.pokemon_list,self.pokemon_list)
+                    complete_battle(User.pokemon_list,self.pokemon_list, True)
                     self.field.map_blit()
                     Player_list.sort(key=lambda p: p.y)
                     for p in Player_list:
@@ -282,7 +282,7 @@ class Computer_Player(Player):
                     if (self.walk(self.direction) == False):
                         can_walk = False
                         self.waiting = False
-                complete_battle(User.pokemon_list,self.pokemon_list)
+                complete_battle(User.pokemon_list,self.pokemon_list, True)
                 self.field.map_blit()
                 Player_list.sort(key=lambda p: p.y)
                 for p in Player_list:
@@ -293,7 +293,7 @@ class Computer_Player(Player):
                     if (self.walk(self.direction) == False):
                         can_walk = False
                         self.waiting = False
-                complete_battle(User.pokemon_list,self.pokemon_list)
+                complete_battle(User.pokemon_list,self.pokemon_list, True)
                 self.field.map_blit()
                 from Main import Player_list
                 Player_list.sort(key=lambda p: p.y)
@@ -305,7 +305,7 @@ class Computer_Player(Player):
                     if (self.walk(self.direction) == False):
                         can_walk = False
                         self.waiting = False
-                complete_battle(User.pokemon_list,self.pokemon_list)
+                complete_battle(User.pokemon_list,self.pokemon_list, True)
                 self.field.map_blit()
                 from Main import Player_list
                 Player_list.sort(key=lambda p: p.y)
