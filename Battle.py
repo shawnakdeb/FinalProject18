@@ -18,16 +18,11 @@ moves = {
 
 def turn(atkP, defP, is_user_turn):
 #    is_user_turn = False
-    print(atkP.species,"is attacking",defP.species,",who has HP =",defP.hp)
-    if is_user_turn:
-        move = user_move(atkP)
-    else:
-        move = comp_move(atkP)
-
+#    print(atkP.species,"is attacking",defP.species,",who has HP =",defP.hp
     damage = calcDamage(atkP, defP, move)
-    print("Damage to",defP.species,":",damage)
+#    print("Damage to",defP.species,":",damage)
     defP.hp -= damage
-    print(defP.species,"HP now =",defP.hp, "\n\n")
+#    print(defP.species,"HP now =",defP.hp, "\n\n")
 
 def comp_move(atkP):
     move_name = random.choice(atkP.moves)
@@ -62,6 +57,7 @@ def battle(userP, compP):
 
 def calcMultiplier(move, defPok):
     key = (move.m_type, defPok.p_type)
+    
     multiplier = 1
     check = {
         ('Fire', 'Water') : 0.5,
@@ -167,7 +163,8 @@ def calcMultiplier(move, defPok):
     return multiplier
 
 def calcDamage(atkPok, defPok, move):
-    typeMult = calcMultiplier(move, defPok)
+    move_c = moves[move]
+    typeMult = calcMultiplier(move_c, defPok)
 
     #print("Type Mod:",typeMult)
     
@@ -176,7 +173,7 @@ def calcDamage(atkPok, defPok, move):
    # print("Rand Mod:",randMult)
 
     STABMult = 1
-    if(move.m_type == atkPok.p_type):
+    if(move_c.m_type == atkPok.p_type):
         STABMult = 1.5
     #print("STAB Mod:",STABMult)
 
@@ -188,13 +185,13 @@ def calcDamage(atkPok, defPok, move):
    # print("Crit Mod:",critMult)
 
     accMult = 1
-    if random.randint(1,100) > move.accuracy:
+    if random.randint(1,100) > move_c.accuracy:
         accMult = 0
   #  print("Acc Mod:",accMult)
 
     mod = typeMult * randMult * STABMult * critMult * accMult
    # print("Dam Mod:",mod)
-    damage = math.floor(mod * ( (2*atkPok.lvl/5 + 2) * move.power * atkPok.atk / defPok.defe / 50 + 2))
+    damage = math.floor(mod * ( (2*atkPok.lvl/5 + 2) * move_c.power * atkPok.atk / defPok.defe / 50 + 2))
     return damage     
 
 

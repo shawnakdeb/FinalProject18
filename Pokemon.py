@@ -22,6 +22,9 @@ class Pokemon:
        self.p_type = p_type
        self.isFainted = False
 
+def set_sprite(self, img):
+    self.sprite = img
+
 def calcLevel(pok):
     while pok.exp > 4 / 5 * pok.lvl * pok.lvl * pok.lvl and pok.lvl < 100:
          pok.lvl+=1        
