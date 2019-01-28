@@ -18,6 +18,7 @@ gameDisplay = pygame.display.set_mode((xsize, ysize))
 pygame.mixer.music.load('Route Music.mp3')
 pygame.mixer.music.play(-1)
 
+#colors for npc trainers
 RED = (240, 104, 72)
 DARKRED = (192,56,56)
 BLUE = (168, 184, 208)
@@ -26,7 +27,8 @@ GREEN = (100, 229, 139)
 DARKGREEN = (24, 178, 9)
 YELLOW = (248, 197, 95)
 DARKYELLOW = (225, 157, 0)
-#Creates the player
+
+#Creates the pokemon
 pika = Pokemon("Pikachu", 35, 55, 40, 90, 112, "pikachu forward2.jpg", 100, "Electric", ["Thunderbolt", "Rock Climb", "Surf", "Bug Buzz"])
 arbok = new_arbok()
 rem_background(pika)
@@ -35,6 +37,8 @@ initialize(pika)
 arbok1 = new_arbok()
 arbok2 = new_arbok()
 arbok3 = new_arbok()
+
+#creates players
 Player1 = Player(3,2, RED, DARKRED, [pika])
 Player2 = Computer_Player(7,4, field, BLUE, DARKBLUE, "up", [arbok1])
 Player3 = Computer_Player(10,13, field2, GREEN, DARKGREEN, "left", [arbok2])
@@ -42,10 +46,7 @@ Player4 = Computer_Player(5,10, field, YELLOW, DARKYELLOW, "down", [arbok3])
 Player_list=[Player1, Player2, Player3, Player4]
 p_list = Player_list.copy()
 p_list.remove(Player1)
-"""for x in range (10):
-    Player_list.append(Player())"""
     
-
 Player1.turn("up")
 running = True
 
@@ -54,12 +55,10 @@ last_presssed = "down"
 t0 = time.perf_counter()
 
 while running:
-
+    """main loop"""
     for e in pygame.event.get():
         if e.type == pygame.QUIT:
             running = False
-        """if e.type == pygame.KEYDOWN:
-            if e.key == pygame.K_UP:"""
                                            
     keys = pygame.key.get_pressed()
 
@@ -69,7 +68,7 @@ while running:
             Player1.run("up")
         if keys[pygame.K_DOWN]:
             Player1.run("down")
-        if keys[pygame.K_LEFT]:
+        if keys[pygame.K_LEFT]:       
             Player1.run("left")
         if keys[pygame.K_RIGHT]:
             Player1.run("right")
@@ -103,10 +102,4 @@ while running:
                 last_presssed = "right"
             if (keys[pygame.K_RIGHT] and ((time.perf_counter() - t0) > 0.2)):
                 Player1.walk("right")
-    
-    """if (random.random()<0.01):
-        dir_list = ["up", "down", "right", "left"]
-        ranchoices = random.choices(dir_list, k=len(p_list))
-        for x in range(len(p_list)):
-            p_list[x].walk(ranchoices[x])"""
     pygame.display.flip()
