@@ -3,7 +3,7 @@ import pygame
 pygame.init()
 gameDisplay = pygame.display.set_mode((700, 700))
 from block import *
-from Battle import *
+#from Battle import *
 
 WHITE = (255,255,255)
 class Player:

@@ -11,7 +11,6 @@ class Pokemon:
        self.base_spd = base_spd
        self.base_exp = base_exp
        self.sprite = pygame.image.load(sprite)
-       self.sprite.set_colorkey((255,255,255))
        self.moves = moves
        self.exp = exp
        self.lvl = 0
@@ -20,7 +19,6 @@ class Pokemon:
        self.spd = 0
        self.hp = 0
        self.max_hp = 0
-       self.sprite = sprite
        self.p_type = p_type
        self.isFainted = False
 

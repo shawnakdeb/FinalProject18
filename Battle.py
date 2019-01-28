@@ -198,15 +198,16 @@ def calcDamage(atkPok, defPok, move):
     return damage     
 
 
-t = Pokemon.Pokemon("Pikachu", 35, 55, 40, 90, 112, "pikachu forward.jpg", 100, "Electric", ["Thunderbolt", "Rock Climb", "Surf", "Bug Buzz"] )
-v = Pokemon.Pokemon("Arbok", 60, 95, 69, 80, 157, "pikachu forward.jpg", 60, "Poison", ["Sludge Bomb", "Brick Break", "Earthquake", "Rock Slide"] )
-Pokemon.initialize(t)
-Pokemon.initialize(v)
-print(t.lvl, t.atk, t.defe, t.spd, t.hp)
+pika = Pokemon.Pokemon("Pikachu", 35, 55, 40, 90, 112, "pikachu forward.jpg", 100, "Electric", ["Thunderbolt", "Rock Climb", "Surf", "Bug Buzz"] )
+arbok = Pokemon.Pokemon("Arbok", 60, 95, 69, 80, 157, "arbok front.png", 60, "Poison", ["Sludge Bomb", "Brick Break", "Earthquake", "Rock Slide"] )
+Pokemon.initialize(pika)
+Pokemon.initialize(arbok)
+"""print(t.lvl, t.atk, t.defe, t.spd, t.hp)
 print(v.lvl, v.atk, v.defe, v.spd, v.hp)
+"""
 aWins = 0
 pWins = 0
-for x in range(10):
+"""for x in range(10):
     winner = battle(t, v)
     print(winner.species,"wins")
     if winner.species == "Pikachu":
@@ -221,7 +222,7 @@ for x in range(10):
     print(v.lvl, v.atk, v.defe, v.spd, v.hp)
 print(pWins)
 #battle(t, v)
-
+"""
 running = False
 while running:
     for e in pygame.event.get():
