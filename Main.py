@@ -2,6 +2,7 @@
 
 import pygame
 import random
+
 import os
 from block import *
 from Player import *
@@ -13,7 +14,7 @@ import time
 xsize = (width+1)*grass.get_size()[0]
 ysize = (length+1)*grass.get_size()[1]
 gameDisplay = pygame.display.set_mode((xsize, ysize))
-
+print(xsize,ysize)
 #plays background music
 pygame.mixer.music.load('Route Music.mp3')
 pygame.mixer.music.play(-1)

@@ -13,7 +13,7 @@ BLACK = (0,0,0)
 BLUE = (0,0,255)
 GREEN = (0,255,0)
 RED = (255,0,0)
-screen_size = (900,700)
+screen_size = (920,700)
 text_blit_pos = (50,520)
 active_player_pokemon = "" # initialize global user pokemon variable
 active_opp_pokemon = "" # initialize global comp pokemon variable
@@ -69,9 +69,9 @@ def blit(thing, pos):
 
 def draw_rect():
     """Draws text rectangle"""
-    pygame.draw.rect(gameDisplay,WHITE,(0,500,900,200))
-    pygame.draw.rect(gameDisplay,BLUE,(0,500,900,200),6)
-    pygame.draw.rect(gameDisplay,GREEN,(2,502,896,196),2)
+    pygame.draw.rect(gameDisplay,WHITE,(0,500,920,200))
+    pygame.draw.rect(gameDisplay,BLUE,(0,500,917,200),6)
+    pygame.draw.rect(gameDisplay,GREEN,(2,502,914,196),2)
 
 def flash():
     """Flashes screen to start battle (unused)"""
@@ -394,6 +394,7 @@ def complete_battle(player_party, opp_party, trainer):
         if(active_player_pokemon.hp == 0):      # if player pokemon is defeated, reset to initial state at level 5
                 active_player_pokemon.exp = 100
                 initialize(active_player_pokemon)
+                big_battle = False
         restore_hp(active_player_pokemon)       # at the end of battle, restore user pokemon's hp
         
 

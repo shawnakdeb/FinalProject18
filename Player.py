@@ -274,14 +274,14 @@ class Computer_Player(Player):
                     if (self.walk(self.direction) == False):
                         can_walk = False
                         self.waiting = False
-                    #begins battle
-                    complete_battle(User.pokemon_list,self.pokemon_list, True)
-                    self.field.map_blit()
-                    from Main import Player_list
-                    Player_list.sort(key=lambda p: p.y)
-                    for p in Player_list:
-                        if (p.field == self.field):
-                            p.blit()
+                #begins battle
+                complete_battle(User.pokemon_list,self.pokemon_list, True)
+                self.field.map_blit()
+                from Main import Player_list
+                Player_list.sort(key=lambda p: p.y)
+                for p in Player_list:
+                    if (p.field == self.field):
+                        p.blit()
 
             elif (self.direction == "right" and (User.x - self.x) < 10 and (User.x - self.x) > 0 and self.y == User.y):
                 while(can_walk):
