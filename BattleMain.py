@@ -1,7 +1,7 @@
 import pygame, random
 from pygame import *
 import Pokemon, Move
-from Pokemon import update_stats, restore_hp
+from Pokemon import update_stats, restore_hp, initialize
 from Battle import calcDamage
 
 pygame.init()
@@ -327,8 +327,6 @@ def complete_battle(player_party, opp_party):
                         
                                 key = pygame.key.get_pressed()
                                 
-                                if key[pygame.K_s]:
-                                        action = "switch"
                                 if key[pygame.K_b]:
                                         action = "battle"
                                 
@@ -337,11 +335,7 @@ def complete_battle(player_party, opp_party):
                                         choosing_action = False
                                         choosing_move = True
                                         print(action)
-                                elif action == "switch": 
-                                        #switch()
-                                        #switching = True
-                                        print(action)        
-                                #action = "nada"
+                                
                         key = None
 
                 choose_move(active_player_pokemon)
@@ -373,6 +367,10 @@ def complete_battle(player_party, opp_party):
                 new_turn(active_player_pokemon, active_opp_pokemon, user_move, comp_move)
                 user_move = None
                 comp_move = None
+        if(active_player_pokemon.hp == 0):
+                active_player_pokemon.exp = 100
+                initialize(active_player_pokemon)
+        restore_hp(active_player_pokemon)
         
 
 
