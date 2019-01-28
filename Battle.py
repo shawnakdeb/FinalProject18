@@ -217,7 +217,7 @@ pWins = 0
     Pokemon.restore_hp(v)
     print(t.lvl, t.atk, t.defe, t.spd, t.hp)
     print(v.lvl, v.atk, v.defe, v.spd, v.hp)
-print(pWins)
+print(pWins)"""
 #battle(t, v)
 """
 running = False
