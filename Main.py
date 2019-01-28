@@ -13,7 +13,7 @@ pygame.mixer.music.load('Route Music.mp3')
 pygame.mixer.music.play(-1)
 Player1 = Player(3,2)
 #Player2= Player(3,4)
-#Player3= Player(4,3)
+#Player3= Player(4,3)P
 Player_list=[Player1]#, Player2, Player3]
 p_list = Player_list.copy()
 p_list.remove(Player1)

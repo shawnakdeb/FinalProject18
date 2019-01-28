@@ -18,8 +18,12 @@ Tree1Part = pygame.image.load('Tree1Part.png').convert()
 Tree1Part.set_colorkey(BLACK)
 Tree2Part = pygame.image.load('Tree2Part.png').convert()
 Tree2Part.set_colorkey(BLACK)
-length = 12
-width = 15
+length = 32
+width = 39
+print(grass.get_size()[1])
+print(grass.get_size()[0])
+print(700/grass.get_size()[1])
+print(900/grass.get_size()[0])
 def in_range(x, y):
     if (x < 0 or x > width or y < 0 or y > length):
         return False
@@ -133,6 +137,9 @@ def new_field(left, right, top, bottom):
     for x in range(width + 1):
         fieldlist.append({})
         for y in range(length + 1):
+            fieldlist[x][y] = None
+    for x in range(width + 1):
+        for y in range(length + 1):
             if ((not ((x == 0 or x == width - 1) and y == length - 2)) and (x%2 == 0 and (y == 0 or y == length - 2))):
                 fieldlist[x][y] = Tree1
             elif ((not ((x == 1 or x == width) and y == length - 2)) and (x%2 == 1 and (y == 0 or y == length - 2))):
@@ -152,7 +159,25 @@ def new_field(left, right, top, bottom):
             elif (x == 2 or x == width - 2 or y == 3):
                 fieldlist[x][y] = plain
             else:
-                fieldlist[x][y] = grass
+                if (random.random()<0.082):
+                    for i in range(random.randint(1,3)):
+                        for j in range(random.randint(1,3)):
+                            for k in range(random.randint(1,3)):
+                                for l in range(random.randint(1,3)):
+                                    if (fieldlist[x+i][y+j] == None):
+                                        fieldlist[x+i][y+j] = grass
+                                    if (fieldlist[x+i][y-l] == None):
+                                        fieldlist[x+i][y-l] = grass
+                                    if (fieldlist[x-k][y+j] == None):
+                                        fieldlist[x-k][y+j] = grass
+                                    if (fieldlist[x-k][y-l] == None):
+                                        fieldlist[x-k][y-l] = grass
+                else:
+                    fieldlist[x][y] = None
+    for x in range(width + 1):
+        for y in range(length + 1):
+            if (fieldlist[x][y] == None):
+                fieldlist[x][y] = plain
     if (left):
         left_clearing(fieldlist)
     if (right):

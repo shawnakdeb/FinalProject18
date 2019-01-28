@@ -202,11 +202,11 @@ t = Pokemon.Pokemon("Pikachu", 35, 55, 40, 90, 112, "pikachu forward.jpg", 100, 
 v = Pokemon.Pokemon("Arbok", 60, 95, 69, 80, 157, "pikachu forward.jpg", 60, "Poison", ["Sludge Bomb", "Brick Break", "Earthquake", "Rock Slide"] )
 Pokemon.initialize(t)
 Pokemon.initialize(v)
-print(t.lvl, t.atk, t.defe, t.spd, t.hp)
-print(v.lvl, v.atk, v.defe, v.spd, v.hp)
+#print(t.lvl, t.atk, t.defe, t.spd, t.hp)
+#print(v.lvl, v.atk, v.defe, v.spd, v.hp)
 aWins = 0
 pWins = 0
-for x in range(10):
+"""for x in range(10):
     winner = battle(t, v)
     print(winner.species,"wins")
     if winner.species == "Pikachu":
@@ -219,7 +219,7 @@ for x in range(10):
     Pokemon.restore_hp(v)
     print(t.lvl, t.atk, t.defe, t.spd, t.hp)
     print(v.lvl, v.atk, v.defe, v.spd, v.hp)
-print(pWins)
+print(pWins)"""
 #battle(t, v)
 
 running = False
