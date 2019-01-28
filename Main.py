@@ -18,16 +18,19 @@ pygame.mixer.music.load('Route Music.mp3')
 pygame.mixer.music.play(-1)
 
 RED = (240, 104, 72)
-BLUE = (77, 129, 214)
-GREEN = (24, 178, 9)
+DARKRED = (192,56,56)
+BLUE = (168, 184, 208)
+DARKBLUE = (64, 120, 192)
+GREEN = (100, 229, 139)
+DARKGREEN = (24, 178, 9)
 YELLOW = (248, 197, 95)
-
+DARKYELLOW = (225, 157, 0)
 #Creates the player
-Player1 = Player(3,2, RED)
+Player1 = Player(3,2, RED, DARKRED)
 
-Player2 = Player(3,4, BLUE)
-Player3 = Player(4,3, GREEN)
-Player4 = Player(4,4, YELLOW)
+Player2 = Player(3,4, BLUE, DARKBLUE)
+Player3 = Player(4,3, GREEN, DARKGREEN)
+Player4 = Player(4,4, YELLOW, DARKYELLOW)
 Player_list=[Player1, Player2, Player3, Player4]
 p_list = Player_list.copy()
 p_list.remove(Player1)
