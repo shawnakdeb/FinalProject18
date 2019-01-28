@@ -4,7 +4,7 @@ import pygame, math, random
 
 pygame.init()
 
-moves = {
+moves = {       # defines a dictionary of moves
     'Hydro Pump': move('Hydro Pump', 'Water', 110, 80, 5),
     'Thunderbolt': move('Thunderbolt', 'Electric', 90, 100, 15),
     'Bug Buzz': move('Bug Buzz', 'Bug', 90, 100, 15),
@@ -59,7 +59,7 @@ def calcMultiplier(move, defPok):
     key = (move.m_type, defPok.p_type)
     
     multiplier = 1
-    check = {
+    check = {   # checks type effectiveness multiplier
         ('Fire', 'Water') : 0.5,
         ('Fire', 'Rock') : 0.5,
         ('Fire', 'Grass') : 2,
@@ -162,49 +162,49 @@ def calcMultiplier(move, defPok):
 
     return multiplier
 
-def calcDamage(atkPok, defPok, move):
+def calcDamage(atkPok, defPok, move): # calculates damage based on formula
     move_c = moves[move]
-    typeMult = calcMultiplier(move_c, defPok)
+    typeMult = calcMultiplier(move_c, defPok) # gets damage based on defending type and attacking move
 
     #print("Type Mod:",typeMult)
     
-    randMult = random.randint(217, 255) / 255.0
+    randMult = random.randint(217, 255) / 255.0     # random multiplier to damage
     
    # print("Rand Mod:",randMult)
 
-    STABMult = 1
+    STABMult = 1        # Extra damage if attacking move same type as pokemon 
     if(move_c.m_type == atkPok.p_type):
         STABMult = 1.5
     #print("STAB Mod:",STABMult)
 
-    critMult = 1
+    critMult = 1        # Adds random chance of extra damage based on Pokemon's speed 
     crit_prob = atkPok.base_spd / 512.0
     if random.random() < crit_prob:
         critMult = 2 
 
    # print("Crit Mod:",critMult)
 
-    accMult = 1
+    accMult = 1         # Adds chance of missing 
     if random.randint(1,100) > move_c.accuracy:
         accMult = 0
   #  print("Acc Mod:",accMult)
 
-    mod = typeMult * randMult * STABMult * critMult * accMult
+    mod = typeMult * randMult * STABMult * critMult * accMult   #total modifier
    # print("Dam Mod:",mod)
     damage = math.floor(mod * ( (2*atkPok.lvl/5 + 2) * move_c.power * atkPok.atk / defPok.defe / 50 + 2))
     return damage     
 
-
+"""
 pika = Pokemon.Pokemon("Pikachu", 35, 55, 40, 90, 112, "pikachu forward.jpg", 100, "Electric", ["Thunderbolt", "Rock Climb", "Surf", "Bug Buzz"] )
 arbok = Pokemon.Pokemon("Arbok", 60, 95, 69, 80, 157, "arbok front.png", 60, "Poison", ["Sludge Bomb", "Brick Break", "Earthquake", "Rock Slide"] )
 Pokemon.initialize(pika)
 Pokemon.initialize(arbok)
-"""print(t.lvl, t.atk, t.defe, t.spd, t.hp)
+print(t.lvl, t.atk, t.defe, t.spd, t.hp)
 print(v.lvl, v.atk, v.defe, v.spd, v.hp)
-"""
+
 aWins = 0
 pWins = 0
-"""for x in range(10):
+for x in range(10):
     winner = battle(t, v)
     print(winner.species,"wins")
     if winner.species == "Pikachu":
