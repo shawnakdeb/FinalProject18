@@ -323,5 +323,3 @@ while big_battle:
         comp_move = random.choice(active_opp_pokemon.moves)
         new_turn(active_player_pokemon, active_opp_pokemon, user_move, comp_move)
         break
-                
-                        

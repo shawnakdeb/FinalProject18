@@ -7,7 +7,7 @@ from block import *
 
 WHITE = (255,255,255)
 class Player:
-    def __init__(self, x, y, color, dark_color):
+    def __init__(self, x, y, color, dark_color, pokemon_list:
         #imports sprite images
         self.fs = pygame.image.load('still_front.png').convert()
         self.f1 = pygame.image.load('Forward_1.png').convert()
@@ -40,6 +40,7 @@ class Player:
             for sprite in self.sprite_list:
                 sprite.set_colorkey(WHITE)
         self.sprite = self.fs
+        self.pokemon_list = pokemon_list
         self.x = x + .1736
         self.y = y + .5
         self.i = 1
@@ -201,8 +202,8 @@ class Player:
         #    battle(t,v)
 
 class Computer_Player(Player):
-    def __init__(self, x, y, field, color, dark_color, direction):
-        Player.__init__(self, x, y, color, dark_color)
+    def __init__(self, x, y, field, color, dark_color, direction, pokemon_list):
+        Player.__init__(self, x, y, color, dark_color, pokemon_list)
         self.waiting = True
         self.field = field
         self.direction = direction

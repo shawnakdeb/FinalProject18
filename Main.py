@@ -6,6 +6,7 @@ import time
 import os
 from block import *
 from Player import *
+from Pokemon import *
 pygame.init()
 
 #sets up game display
@@ -26,7 +27,7 @@ DARKGREEN = (24, 178, 9)
 YELLOW = (248, 197, 95)
 DARKYELLOW = (225, 157, 0)
 #Creates the player
-Player1 = Player(3,2, RED, DARKRED)
+Player1 = Player(3,2, RED, DARKRED, [])
 Player2 = Computer_Player(7,4, field, BLUE, DARKBLUE, "up")
 Player3 = Computer_Player(10,13, field2, GREEN, DARKGREEN, "left")
 Player4 = Computer_Player(5,10, field, YELLOW, DARKYELLOW, "down")
