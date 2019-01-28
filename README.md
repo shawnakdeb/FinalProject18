@@ -13,3 +13,6 @@
     * Bulbapedia Sprite on Bulbapedia
     * Serebii Forums' region bitmap: Heart Gold, Soul Silver Grass 
 * Special thanks to Ms. Gerstein, who taught us enough python to make a decent game
+
+### Flowchart
+*Link: https://www.lucidchart.com/documents/view/6206b939-d55d-499e-a2d7-6360fa212f72/0
