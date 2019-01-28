@@ -27,7 +27,7 @@ GREEN = (100, 229, 139)
 DARKGREEN = (24, 178, 9)
 YELLOW = (248, 197, 95)
 DARKYELLOW = (225, 157, 0)
-
+colors = [(BLUE,DARKBLUE), (GREEN,DARKGREEN), (YELLOW,DARKYELLOW)]
 #Creates the pokemon
 pika = Pokemon("Pikachu", 35, 55, 40, 90, 112, "pikachu forward2.jpg", 100, "Electric", ["Thunderbolt", "Rock Climb", "Surf", "Bug Buzz"])
 arbok = new_arbok()
@@ -44,6 +44,9 @@ Player2 = Computer_Player(7,4, field, BLUE, DARKBLUE, "up", [arbok1])
 Player3 = Computer_Player(10,13, field2, GREEN, DARKGREEN, "left", [arbok2])
 Player4 = Computer_Player(5,10, field, YELLOW, DARKYELLOW, "down", [arbok3])
 Player_list=[Player1, Player2, Player3, Player4]
+for x in range (20):
+    color = random.choice(colors)
+    Player_list.append(Computer_Player(random.randint(4,width-5), random.randint(4,length-5), random.choice(random.choice(field_array)), color[0], color[1], random.choice(["up", "down", "left", "right"]), [new_arbok()]))
 p_list = Player_list.copy()
 p_list.remove(Player1)
     

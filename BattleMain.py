@@ -337,7 +337,6 @@ def complete_battle(player_party, opp_party, trainer):
                                         choose_move(active_player_pokemon)
                                         choosing_action = False
                                         choosing_move = True
-                                        print(action)
                                 
                         key = None
 
