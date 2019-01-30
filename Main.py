@@ -2,7 +2,6 @@
 
 import pygame
 import random
-
 import os
 from block import *
 from Player import *
@@ -14,7 +13,7 @@ import time
 xsize = (width+1)*grass.get_size()[0]
 ysize = (length+1)*grass.get_size()[1]
 gameDisplay = pygame.display.set_mode((xsize, ysize))
-print(xsize,ysize)
+
 #plays background music
 pygame.mixer.music.load('Route Music.mp3')
 pygame.mixer.music.play(-1)
@@ -45,9 +44,10 @@ Player2 = Computer_Player(7,4, field, BLUE, DARKBLUE, "up", [arbok1])
 Player3 = Computer_Player(10,13, field2, GREEN, DARKGREEN, "left", [arbok2])
 Player4 = Computer_Player(5,10, field, YELLOW, DARKYELLOW, "down", [arbok3])
 Player_list=[Player1, Player2, Player3, Player4]
+field_arr_2 = [field_array[0][1], field_array[1][1], field_array[1][2], field_array[1][0], field_array[2][1]]
 for x in range (20):
     color = random.choice(colors)
-    Player_list.append(Computer_Player(random.randint(4,width-5), random.randint(4,length-5), random.choice(random.choice(field_array)), color[0], color[1], random.choice(["up", "down", "left", "right"]), [new_arbok()]))
+    Player_list.append(Computer_Player(random.randint(4,width-5), random.randint(4,length-5), random.choice(field_arr_2), color[0], color[1], random.choice(["up", "down", "left", "right"]), [new_arbok()]))
 p_list = Player_list.copy()
 p_list.remove(Player1)
     

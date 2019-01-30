@@ -59,7 +59,13 @@ class Player:
         """changes which grid the player is on"""
         self.field = field_array[self.j][self.i]
         self.field.map_blit()
-        self.blit()
+        from Main import Player_list
+        Player_list.sort(key=lambda p: p.y)
+        for p in Player_list:
+            if (p.field == self.field):
+                p.blit()
+        self.field.top_blit(self.x, self.y)
+        pygame.display.flip()
     
     def turn(self, direction):
         """the player turns in a given direction"""
