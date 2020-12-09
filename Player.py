@@ -296,6 +296,7 @@ class Computer_Player(Player):
                         self.waiting = False
                 complete_battle(User.pokemon_list,self.pokemon_list, True)
                 self.field.map_blit()
+                from Main import Player_list
                 Player_list.sort(key=lambda p: p.y)
                 for p in Player_list:
                     if (p.field == self.field):
